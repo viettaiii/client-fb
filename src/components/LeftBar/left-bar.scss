@@ -1,0 +1,71 @@
+@use '../../scss/' as *;
+
+
+.left-bar {
+    @include themify($themes) {
+        width: 360px;
+        padding: 8px 10px;
+        position: sticky;
+        height: calc(100vh - calc($height-header + 20px));
+        top:calc($height-header);
+        overflow: scroll;  
+        z-index: 1; 
+
+        @include desktop {
+            & {
+                display: none;
+            }
+        }
+        @include webkit-bar;
+        &__items {
+            display: flex;
+            flex-direction: column;
+        gap:4px;
+        padding: 10px 0px;
+        border-bottom: 1px solid themed(border);
+
+           &:last-child {
+            border-bottom: 1px solid transparent;
+           }
+        &__item {
+            display: flex;
+            gap:10px;
+            align-items: center;
+            padding: 8px;
+            border-radius: 10px 0px 0px 10px;
+            img {
+                width: 29px;
+                height: 29px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+            &__name {
+                font-size: 1.4rem;
+                font-weight: 500;
+                color:themed(textColor);
+            }
+            &__title {
+                font-size: 1.8rem;
+            }
+            transition: background-color 0.1s linear;
+            &:hover {
+                background-color: $gray-light;
+                cursor: pointer;
+            }
+
+            &__icon {
+                width: 29px;
+                height: 29px;
+                background-color: rgba(255,0,0,0.1);
+                border-radius: 50%;
+                font-weight: 900;
+                font-size: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color:white;
+            }
+        }
+        }
+    }
+}

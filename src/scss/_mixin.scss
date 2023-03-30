@@ -1,0 +1,96 @@
+@use "./variables" as *;
+
+$themes: (
+  light: (
+    textColor: #000,
+    bg: white,
+    logo: darkblue,
+    bgSoft: #f0f2f5,
+    textColorSoft: #555,
+    border: lightgray,
+    bgHover: #39393a,
+    textHover: whitesmoke,
+  ),
+  dark: (
+    textColor: whitesmoke,
+    bg: #222,
+    logo: white,
+    bgSoft: #333,
+    textColorSoft: lightgray,
+    border: #444,
+    bgHover: white,
+    textHover: #39393a,
+  ),
+);
+@mixin themify($themes) {
+  @each $theme, $map in $themes {
+    .theme-#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+@mixin hover-light-gray( $borderRadius: 0px ,$backgroundColor:rgba(0, 0, 0, 0.1)) {
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: $borderRadius;
+    content: "";
+    transition: background-color 0.1s linear;
+    cursor: pointer;
+  }
+  &:hover::after {
+    background-color: $backgroundColor;
+  }
+}
+
+@mixin box-shadow($light-color: rgba(0, 0, 0, 0.92)) {
+  -webkit-box-shadow: 0px 0px 32px -12px $light-color;
+  -moz-box-shadow: 0px 0px 32px -12px $light-color;
+  box-shadow: 0px 0px 32px -12px $light-color;
+}
+
+@mixin border($outline:none , $border:none) {
+  border:$border;
+  outline:$outline;
+}
+
+@mixin flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin webkit-bar {
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 9px;
+}
+
+&::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.61);
+    width: 9px;
+    border-radius: 20px;
+}
+&::-webkit-resizer {
+    resize: both;
+}
+}

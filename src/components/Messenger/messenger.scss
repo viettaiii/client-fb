@@ -1,0 +1,18 @@
+@use '../../scss/' as *;
+
+.messenger {
+    @include themify($themes) {
+        display: flex;
+        height: 100vh;
+        .conversations {
+            flex:3;
+        }
+        .messenges {
+            flex:5.5
+        }
+        .online {
+            flex:3
+        }
+    }
+    
+}

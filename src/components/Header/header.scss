@@ -1,0 +1,151 @@
+@use "../../scss/" as *;
+
+.header {
+  @include themify($themes) {
+    display: flex;
+    justify-content: space-between;
+    height: $height-header;
+    background-color: themed(bg);
+    -webkit-box-shadow: -4px 10px 9px -8px themed(border);
+    -moz-box-shadow: -4px 10px 9px -8px themed(border);
+    box-shadow: -4px 10px 9px -8px themed(border);
+    padding: 0px 16px;
+    position: sticky;
+    top:0;
+    z-index: 9;
+    &__left {
+      max-width: 360px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex:1;
+
+      
+      @include desktop-xl  {
+        & {
+          max-width: 390px;
+        }
+      }
+
+     &__logo {
+      width: 45px;
+      height: 45px;
+      border-radius:50% ;
+     }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius:50% ;
+        cursor: pointer;
+      }
+
+      &__search {
+        background-color: themed(bgSoft);
+        border-radius: 200px;
+        min-width: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include desktop-xl  {
+          & {
+           min-width: 40px;
+           cursor: pointer;
+          }
+        }
+        display: flex;
+        align-items: center;
+        height: 40px;
+        gap: 10px;
+        padding: 0px 10px;
+        color: themed(textColor);
+        input {
+          outline: none;
+          border: none;
+          color: themed(textColorSoft);
+          background-color: transparent;
+          height: 100%;
+          font-size: 1.5rem;
+          padding: 5px 0px 5px 10px;
+          flex: 1;
+          &::placeholder {
+            color: currentColor;
+          }
+          @include desktop-xl  {
+            & {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+    &__center {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      @include mobile {
+        display: none;
+      }
+     
+      &__icon {
+        font-size: 2.64rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0px 41px;
+        position: relative;
+        cursor: pointer;
+        max-width: 110px;
+        color:themed(textColorSoft);
+          @include desktop-xl  {
+            max-width: 100px;
+            padding: 0px 20px;
+          }
+          @include tablet {
+            & {
+              padding: 0px 10px;
+            }
+          }
+        & .text-hover {
+          display: none;
+        }
+       &:hover .text-hover {
+          display: flex;
+        }
+        &:hover {
+          background-color: $gray-light;
+          height: 80%;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          margin: 10% 0px;
+        }
+        &.select {
+          color: $primary-color;
+          position: relative;
+          &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            top:calc(100% - 4px);
+           background-color:$primary-color;
+          }
+          &:hover {
+            height: 100%;
+           
+            background-color: transparent;
+            border-radius:unset;
+          }
+        }
+      }
+    }
+   
+  }
+}
+
+
+

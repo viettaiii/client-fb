@@ -1,0 +1,31 @@
+
+@use '../../scss/' as *;
+.home {
+    @include themify($themes) {
+        margin: 0px 150px;
+        flex:1;
+      
+        @include desktop-xl {
+            & {
+                margin: 0px 0px 0px 10px;
+                max-width: 540px;
+                width: 100%;
+            }
+        }
+
+        @include desktop {
+            & {
+               margin: auto;
+               padding: 0px 10px;
+              
+            }
+        }
+
+        @include mobile {
+            @include flex-center;
+            flex-direction: column;
+        }
+
+
+    }
+}

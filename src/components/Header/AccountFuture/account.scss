@@ -1,0 +1,168 @@
+@use "../../../scss/" as *;
+
+.account {
+  @include themify($themes) {
+    width: 360px;
+    position: absolute;
+    top: 120%;
+    left: -330px;
+    -webkit-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+    background-color: themed(bg);
+    border-radius: 10px;
+    padding: 0px 10px;
+    z-index: 99;
+    &__setting {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 10px 10px;
+      align-items: center;
+      h3 {
+        font-size: 2rem;
+      }
+      &__back {
+        font-size: 1.2rem;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.1 linear;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+    &__info {
+      -webkit-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      height: 70px;
+      background-color: themed(bg);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+      margin: 5% 0px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      transition: background-color 0.1s linear;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      img {
+        width: 37px!important;
+        height: 37px!important;
+        object-fit: cover!important;
+        border-radius: 50%;
+        border: 0.1px solid themed(textColor)!important;
+      }
+
+      &__name {
+        font-size: 1.6rem!important;
+        font-weight: 500!important;
+        color:themed(textColor);
+      }
+    }
+    &__futures {
+      display: flex;
+      flex-direction: column;
+      color: themed(textColor);
+      padding: 0px 2px 20px 2px;
+      position: relative;
+      &__future {
+        display: flex;
+        gap: 10px;
+        padding: 8px;
+        border-radius: 5px;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        transition: background-color 0.1s linear;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+        &__one {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          font-size: 1.4rem;
+          font-weight: 500;
+          &__icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: themed(bgSoft);
+            color:themed(bgColor)!important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            
+          }
+          &__text-other {
+            position: absolute;
+            top: 67%;
+            left: 57px;
+            width: 80%;
+            font-size: 1.3rem;
+            font-weight: 200;
+          }
+        }
+
+        &__nodes {
+          margin-top: 40px;
+          padding: 0px 20px 0px 55px;
+          min-height: 40px;
+          display: flex;
+          gap:10px;
+          cursor:default;
+          flex-direction: column;
+          &__node {
+            display: flex;
+            align-items: center;
+            span {
+              font-size: 1.5rem;
+              padding: 2px 5px;
+              &:first-child {
+                width: 100%;
+              }
+              
+            }
+            &__turn-on {
+              display: block;
+              width: 14px;
+              height: 14px;
+              background-color: greenyellow;
+              border: 1px solid themed(textColor);
+              border-radius: 50%;
+              padding: 5px;
+            }
+            &__turn-off{
+                width: 30px;
+                height: 30px;
+                padding: 10px;
+                border: 1px solid themed(textColor);
+                border-radius: 50%;
+              transition: background-color 0.1s linear;
+                &:hover {
+                  background-color: rgba(172, 255, 47, 0.154);
+                }
+            }
+          }
+        }
+      }
+      &__disable-hover {
+        &:hover {
+            background-color: transparent;
+            cursor:default;
+        }
+    }
+    }
+  }
+}

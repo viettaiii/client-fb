@@ -1,0 +1,46 @@
+
+@use '../../scss/' as * ;
+
+.emoij {
+    @include themify($themes) {
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 5px;
+    @include flex-center;
+    color:rgba(0, 0, 0, 0.5);
+    transition: color 0.1s ease-in-out;
+    position: absolute;
+    bottom:0px;
+    right: 0px;
+    z-index: 99 ;
+    color:themed(textColor);
+    &:hover {
+        color:rgba(0,0,0,1);                        }
+        &__picker {
+            position: absolute;
+            top:100%;
+            left: 50%;
+            transform: translateX(-50%);
+
+            & .epr-header-overlay {
+                display: none;
+            }
+
+            & .epr-preview {
+                display:none;
+            }
+            & .epr-header {
+                position: relative;
+                background-color: white;
+                top:240px;
+                z-index: 99;
+            }
+            & .epr-body {
+                top:-50px;
+            }
+            & .epr-emoji-category-label {
+                display: none!important;
+            }
+        }
+}
+}

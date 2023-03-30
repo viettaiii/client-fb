@@ -1,0 +1,14 @@
+@use '../../scss/' as *;
+
+.posts {
+    @include themify($themes) {
+        display: flex;
+        flex-direction: 10px;
+        flex-direction: column-reverse;
+        gap:20px;
+        margin-top: 20px;
+        max-width: 100%;
+        margin-bottom: 100px;
+        
+    }
+}

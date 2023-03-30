@@ -1,0 +1,113 @@
+@use '../../../scss/' as *;
+
+.modal-make-conversation {
+    @include themify($themes) {
+        position: fixed;
+        z-index: 99;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top:0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+        .make-conversation {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap:10px;
+            padding-bottom: 20px;
+            width: 500px;
+            @include box-shadow;
+            background-color: themed(bg);
+            min-height: 300px;
+            border-radius: 5px;
+            position: relative;
+
+            &__close {
+                position: absolute;
+                top:10px;
+                right: 10px;
+                padding: 10px;
+                border-radius: 50%;
+                @include flex-center;
+                @include hover-light-gray($borderRadius:50%);
+                svg {
+                    font-size: 2.5rem;
+                    color:black;
+                }
+            }
+            h3 {
+                @include flex-center;
+                padding: 10px;
+                font-weight: 500;
+            }
+
+            &__list-users {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                max-height: 400px;
+                overflow-y: scroll;
+                &__user {
+                    display: flex;
+                    gap:10px;
+                    position: relative;
+                    border-radius: 5px;
+                    @include hover-light-gray($borderRadius:5px);
+                    padding: 12px;
+                    &__avatar {
+                        position: relative;
+                        width: 45px;
+                        height: 45px;
+                        border-radius: 50%;
+                        img {
+                           width: 100%;
+                           height: 100%;
+                           border-radius: 50%;
+                            object-fit: cover;
+                           
+                        }
+
+                        small {
+                            position: absolute;
+                            bottom: 0px;
+                            right: 2px;
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                        }
+
+                        & .online {
+                            background-color:rgb(40, 231, 40);
+                        }
+
+                        & .offline {
+                            background-color:red;
+                        }
+                    }
+                    &__info {
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                        small {
+                            position: absolute;
+                            bottom: -5px;
+                            left: 0px;
+                        }
+                        & .online {
+                            color:rgb(40, 231, 40);
+                        }
+
+                        & .offline {
+                            color:red;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

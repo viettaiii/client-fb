@@ -1,0 +1,99 @@
+@use "../../scss/" as *;
+
+.conversations {
+  @include themify($themes) {
+  
+    background-color: themed(bg);
+    color: themed(textColor);
+    position: sticky;
+    height: calc(100vh - calc($height-header + 20px));
+    top: calc($height-header);
+    border-right: 1px solid rgb(205, 203, 203);
+    &__top {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      h3 {
+        font-size: 2.4rem;
+        font-weight: 600;
+      }
+      -webkit-box-shadow: 2px 7px 5px -5px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: 2px 7px 5px -5px rgba(0, 0, 0, 0.4);
+      box-shadow: 2px 7px 5px -5px rgba(0, 0, 0, 0.4);
+      &__search {
+        display: flex;
+        gap: 10px;
+        background-color: themed(bgSoft);
+        align-items: center;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 2rem;
+        input {
+          height: 100%;
+          outline: none;
+          border: none;
+          background-color: transparent;
+          width: 100%;
+        }
+      }
+    }
+
+    &__bottom {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        gap:2px;
+        overflow-y: scroll;
+        height: 80vh;
+        @include webkit-bar;
+        &__conversation {
+            border-radius: 5px;
+            display: flex;
+            gap:10px;
+            padding: 20px 10px;
+            align-items: center;
+            cursor: pointer;
+           
+            position: relative;
+            @include hover-light-gray($borderRadius : 5px);
+            &.active {
+                background-color: lightblue;
+            }
+            &__avatar {
+                width: 50px;
+                height: 50px;
+                position: relative;
+                border-radius: 50%;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+
+                &__online {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 4px;
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 50%;
+                    background-color: lightgreen;
+                    border: 2px solid white;
+                }
+            }
+
+            &__info {
+                &__name {
+                    font-size: 1.7rem;
+                    font-weight: 500;
+                }
+                &__time {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+  }
+}

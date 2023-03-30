@@ -1,0 +1,10 @@
+export const GET_LIKES_REQUEST ='GET_LIKES_REQUEST';
+export const GET_LIKES_SUCCESS ='GET_LIKES_SUCCESS';
+export const GET_LIKES_FAIL ='GET_LIKES_FAIL';
+
+
+
+export const ADD_LIKE ='ADD_LIKE';
+export const DELETE_LIKE ='DELETE_LIKE';
+
+

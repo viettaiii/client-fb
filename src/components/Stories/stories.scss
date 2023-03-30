@@ -1,0 +1,66 @@
+@use "../../scss/" as *;
+
+.stories-menu {
+  @include themify($themes) {
+    display: flex;
+    margin-top: 30px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 10px;
+    width: 100%;
+    height: 60px;
+    background-color: themed(bg);
+    border-radius: 10px 10px 0px 0px;
+   -webkit-box-shadow: 0px 0px 32px -12px rgba(0,0,0,0.92);
+-moz-box-shadow: 0px 0px 32px -12px rgba(0,0,0,0.92);
+box-shadow: 0px 0px 32px -12px rgba(0,0,0,0.92);
+
+@include desktop-xl {
+  max-width: 520px;
+}
+
+@include mobile {
+  max-width: 370px;
+}
+    &__item {
+      flex: 1;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap:5px;
+      justify-content: center;
+      color:gray;
+      cursor: pointer;
+      transition: background-color 0.2 linear;
+      width: 100%;
+      height: calc(100% - 12px);
+      border-radius: 10px;  
+      &:hover {
+        background-color: rgba(0,0,0,0.2);
+      }
+      &__icon {
+        font-size: 2.2rem;
+       
+      }
+      span {
+          font-size: 1.6rem;
+        
+      }
+      &.select  {
+          position: relative;
+          width: 100%;
+          color:$primary-color;
+          &::after {
+              position: absolute;
+              content: "";
+                border-radius: 2px;
+              width: 100%;
+              height: 3px;
+              background-color: $primary-color;
+              bottom: -5px;
+          }
+      }
+    }
+  }
+}
+

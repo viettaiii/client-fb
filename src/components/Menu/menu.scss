@@ -1,0 +1,186 @@
+@use '../../scss/' as *;
+
+.menu {
+    @include themify($themes) {
+        width: 610px;
+        position: absolute;
+        top: 120%;
+        left: -420px;
+        -webkit-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+        background-color: themed(bg);
+        border-radius: 10px;
+        padding: 10px 0px 10px 10px;
+        z-index: 99;
+        display: flex;
+        gap:10px;
+        padding: 20px 4px 20px 20px;
+        overflow-y: scroll;
+        height: 80vh;
+        &::-webkit-scrollbar {
+            background-color: transparent;
+            width: 9px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(128, 128, 128, 0.61);
+            width: 9px;
+            border-radius: 20px;
+        }
+        &::-webkit-resizer {
+            resize: both;
+        }
+
+        &__left {
+            width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap:10px;
+            -webkit-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            height: 1740px;
+            &__search {
+                display: flex;
+                gap:10px;
+                padding:3px 0px;
+                width: 100%;
+                background-color: #F0F2F5;
+                border-radius: 20px;
+
+                input {
+                    outline: none;
+                    border: none;
+                    background-color: transparent;
+                    color:themed(textColorSoft);
+                    font-size: 1.4rem;
+                    font-weight: 400;
+                    &::placeholder {
+                        color:themed(textColorSoft);
+                    }
+                }
+                &__icon {
+                    padding-left: 10px;
+                    font-size: 3rem;
+                    color:themed(textColorSoft);
+                }
+            }
+
+            &__items {
+                display: flex;
+                flex-direction: column;
+                gap:10px;
+                border-bottom: 1px solid gray;
+                padding-bottom: 20px;
+
+                &:last-child {
+                    border-bottom: 1px solid transparent;
+                }
+                &__title {
+                    font-size: 1.8rem;
+                    font-weight: 600;
+                    color:themed(textColor);
+                }
+
+                &__item {
+                    display: flex;
+                    padding: 3px;
+                    border-radius: 8px;
+                    transition: background-color 0.1s ease-in-out;
+                    gap:10px;
+                    &:hover {
+                        background-color: rgba(0, 0, 0, 0.1);
+                    }
+                    img {
+                        width: 37px;
+                        height: 37px;
+                        border-radius:20px ;
+                        object-fit: cover;
+                    }
+                    &__text {
+                        flex:1;
+                        display: flex;
+                        flex-direction: column;
+                        gap:1px;
+
+                        &__name {
+                            font-weight: 500;
+                            font-size: 1.5rem;
+                            color:themed(textColor);
+                        }
+
+                        &__desc {
+                            font-size: 1.2rem;
+                            font-weight: 200;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        &__right {
+            flex:1;
+            -webkit-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 1px 3px 16px 2px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            height: 63%;
+            position: sticky;
+            right: -20px;
+            top:0px;
+            &__header {
+                font-weight: 700;
+                font-size: 1.7rem;
+                display: block;
+                color:themed(textColor);
+            }
+
+            &__items {
+                display: flex;
+                flex-direction: column;
+                padding: 10px 0px;
+                gap:4px;
+                border-bottom: 1px solid gray;
+                &:last-child {
+                    border-bottom: 1px solid transparent;
+                }
+                &__item {
+                    display: flex;
+                    align-items: center;
+                    gap:10px;
+                    transition: background-color 0.1s ease-in-out;
+                    padding: 4px;
+                    border-radius: 5px;
+                    &:hover {
+                        background-color: rgba(0, 0, 0, 0.1);
+                    }
+                    &__icon {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        background-color: rgba(0, 0, 0, 0.1);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        svg {
+                            font-size: 1.8rem;
+                        }
+                    }
+
+                    &__title {
+                        font-size: 1.4rem;
+                        color:themed(textColor);
+                        font-weight: 500;
+                        flex: 1;
+                    }
+                }
+            }
+        }
+    }
+}

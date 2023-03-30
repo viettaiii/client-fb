@@ -1,0 +1,160 @@
+@use "../../scss/" as *;
+.stories {
+  @include themify($themes) {
+    display: none;
+    padding: 20px;
+    width: 664px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: themed(bg);
+    border-radius: 0px 0px 10px 10px;
+    -webkit-box-shadow: 0px 0px 32px -8px rgba(0, 0, 0, 0.92);
+    -moz-box-shadow: 0px 0px 32px -8px rgba(0, 0, 0, 0.92);
+    box-shadow: 0px 0px 32px -8px rgba(0, 0, 0, 0.92);
+    height: 240px;
+    gap: 6px;
+    position: relative;
+    @include desktop-xl {
+      max-width: 520px;
+    }
+
+    @include mobile {
+      max-width: 370px;
+    }
+    &.select {
+      display: flex;
+
+      & .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    &__story {
+      height: 200px;
+      width: 120px;
+      -webkit-box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+      -moz-box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+      box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      &__current-user {
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      &__image-story {
+        width: 100%;
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transition: transform 0.1 ease-in-out;
+        &:hover {
+          transform: scale(1.04);
+        }
+      }
+
+      &__profile-pic {
+        width: 40px;
+        height: 40px;
+        border: 4px solid white;
+        object-fit: cover;
+        border-radius: 50%;
+        position: absolute;
+        top: 14px;
+        left: 10px;
+      }
+
+      &__name {
+        position: absolute;
+        bottom: 10px;
+        color: white;
+        left: 10px;
+        font-size: 1.4rem;
+        font-weight: 500;
+      }
+
+      &__current-user {
+        position: absolute;
+        background-image: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.2),
+          rgba(0, 0, 0, 0.7)
+        );
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+
+      &__up-story {
+        position: absolute;
+        width: 100%;
+        height: 24%;
+        background-color: white;
+        left: 0;
+        bottom: 0;
+        -webkit-box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+        -moz-box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+        box-shadow: 0px 0px 31px -16px rgba(0, 0, 0, 0.92);
+      }
+
+      &__icon {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        width: 100%;
+        left: 50%;
+        bottom: 7%;
+        transform: translateX(-50%);
+        align-items: center;
+
+        svg {
+          width: 40px;
+          height: 40px;
+          background-color: white;
+          border: 4px solod white;
+          color: white;
+          border-radius: 50%;
+        }
+
+        span {
+          font-size: 1.3rem;
+          font-weight: 600;
+        }
+      }
+    }
+
+    &__btn {
+      padding: 16px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: none;
+      border: none;
+      position: absolute;
+      top: 50%;
+      z-index: 1;
+      transform: translateY(-50%);
+      cursor: pointer;
+      &__prev {
+        left: 20px;
+
+        &.swiper-button-disabled {
+          display: none;
+        }
+      }
+      &__next {
+        right: 20px;
+
+        &.swiper-button-disabled {
+          display: none;
+        }
+      }
+    }
+  }
+}
