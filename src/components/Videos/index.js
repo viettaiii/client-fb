@@ -5,17 +5,11 @@ import { Navigation, Pagination  } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
-import { useEffect, useState } from "react";
 import LoadingSkeleton from "../LoadingSkeleton";
-const isFirstLoading = true;
-function Videos({ stories ,idShow ,handleChangeSlide,setIdShow ,thumbsSwiper }) {
-  const [skeleton, setSkeleton] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 4 * 1000);
-  }, []);
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
+ function Videos({ stories ,idShow ,handleChangeSlide,setIdShow ,thumbsSwiper }) {
+  const skeleton = useFirstGoToPage();
+ 
   return (
     <Swiper
     direction={"vertical"}
@@ -34,7 +28,7 @@ function Videos({ stories ,idShow ,handleChangeSlide,setIdShow ,thumbsSwiper }) 
   >
     {stories.map((story, index) => (
       <SwiperSlide key={index}>
-      {isFirstLoading && skeleton ? <LoadingSkeleton /> : <Video
+      { skeleton ? <LoadingSkeleton /> : <Video
             story={story} setIdShow={setIdShow}  idShow={idShow}
           />}
       </SwiperSlide>

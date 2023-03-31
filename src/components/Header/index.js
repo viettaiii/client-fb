@@ -12,26 +12,19 @@ import TextHover from "./TextHover";
 import { routesPublic } from "../../config/routes";
 import HeaderRight from "./HeaderRight";
 import LoadingSkeleton from "../LoadingSkeleton";
-import { useEffect, useState } from "react";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 function Header() {
-  const [skeleton, setSkeleton] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false)
-      isFirstLoading = false;
-    },(4 * 1000))
-  },[])
+  const skeleton = useFirstGoToPage();
   return (
     <div className="header">
       <Link to={routesPublic.home} className="header__left">
       <span className="header__left__logo" >
-      {skeleton && isFirstLoading ? <LoadingSkeleton circle="true" /> :     <img src="/logo.png" alt="facebook" />}
+      {skeleton  ? <LoadingSkeleton circle="true" /> :     <img src="/logo.png" alt="facebook" />}
         
       </span>
       
         <div className="header__left__search">
-        {skeleton && isFirstLoading ? <LoadingSkeleton /> :      <>
+        {skeleton  ? <LoadingSkeleton /> :      <>
          <BsSearch />
           <input
             type="text"
@@ -46,7 +39,7 @@ function Header() {
         </div>
       </Link>
       <div className="header__center">
-      {skeleton && isFirstLoading ? <>
+      {skeleton  ? <>
         <LoadingSkeleton count={1}/> <LoadingSkeleton /> 
         <LoadingSkeleton /> <LoadingSkeleton />
       </> : <>

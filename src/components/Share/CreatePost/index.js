@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useRef, useState } from "react";
 import { GrClose } from "react-icons/gr";
 //-my imports
 
@@ -17,12 +17,13 @@ import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage"; 
 const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
+  const skeleton = useFirstGoToPage();
   const emojiRef = useRef();
   const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
   const { currentUser } = useContext(UserContext);
-  const [skeleton, setSkeleton] = useState(true);
+ 
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
@@ -63,17 +64,12 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
       setTimeout(() => {}, 300);
     }, 3 * 1000);
   };
-  useEffect(() => {
-    setTimeout(() => {
-      isFirstLoading = false;
-      setSkeleton(false);
-    }, 3 * 1000);
-  }, []);
+ 
   return (
     <div className="model-create">
       <div className="create-post" ref={ref}>
         <div className="create-post__header">
-          {skeleton && isFirstLoading ? (
+          {skeleton  ? (
             <LoadingSkeleton />
           ) : (
             <>
@@ -90,14 +86,14 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
         <div className="create-post__center">
           <div className="create-post__center__info">
             <span className="create-post__center__info__avatar">
-              {skeleton && isFirstLoading ? (
+              {skeleton  ? (
                 <LoadingSkeleton circle="true" />
               ) : (
                 <Avatar image={     currentUser.profilePic} alt={currentUser.fistName}/>
               )}
             </span>
             <span className="create-post__center__info__name">
-              {skeleton && isFirstLoading ? (
+              {skeleton  ? (
                 <LoadingSkeleton count={1} height={20} width={100} />
               ) : (
                 <>{currentUser.firstName + " " + currentUser.lastName}</>
@@ -105,7 +101,7 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
             </span>
           </div>
           <div className="create-post__center__search">
-            {skeleton && isFirstLoading ? (
+            {skeleton  ? (
               <LoadingSkeleton count={1} />
             ) : (
               <>
@@ -132,7 +128,7 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
             )}
           </div>
           <div className="create-post__center__upload">
-            {skeleton && isFirstLoading ? (
+            {skeleton  ? (
               <LoadingSkeleton count={1} height={100} />
             ) : (
               <>
@@ -189,7 +185,7 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
           disabled={file || desc ? false : true}
           className={`create-post__submit ${file || desc ? "" : "disable"}`}
         >
-          {skeleton && isFirstLoading ? (
+          {skeleton  ? (
             <LoadingSkeleton count={1} />
           ) : (
             <>Đăng</>

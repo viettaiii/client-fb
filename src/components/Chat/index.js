@@ -1,10 +1,7 @@
 import { IoIosMore } from "react-icons/io";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import { HiVideoCamera } from "react-icons/hi";
-import {
-  BsArrowLeft,
-  BsBoxArrowInDownLeft,
-} from "react-icons/bs";
+import { BsArrowLeft, BsBoxArrowInDownLeft } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { forwardRef, useEffect, useRef } from "react";
@@ -17,16 +14,17 @@ import MakeConversation from "../Modal/MakeConversation";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
-const Chat = forwardRef(( {usersOn }, ref) => {
+const Chat = forwardRef(({ usersOn }, ref) => {
   const makeConversationRef = useRef();
   const [showIconSearch, setShowIconSearch] = useState(true);
-  const [showMakeConversation, setShowMakeConversation] = useClickOutSide(makeConversationRef);
+  const [showMakeConversation, setShowMakeConversation] =
+    useClickOutSide(makeConversationRef);
   const { conversations } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getConversations());
   }, []);
-  
+
   return (
     <div className="chat" ref={ref}>
       <div className="chat__header">
@@ -82,8 +80,8 @@ const Chat = forwardRef(( {usersOn }, ref) => {
       <div className="chat__accounts">
         {conversations.length > 0 &&
           conversations.map((c, index) => (
-            <Link to={routesPublic.messenger} key={index} >
-            <Account conversation={c} />
+            <Link to={routesPublic.messenger} key={index}>
+              <Account conversation={c} />
             </Link>
           ))}
         <button
@@ -95,14 +93,12 @@ const Chat = forwardRef(( {usersOn }, ref) => {
       </div>
       {showMakeConversation && (
         <MakeConversation
-        ref={makeConversationRef}
-        usersOn={usersOn}
+          ref={makeConversationRef}
+          usersOn={usersOn}
           showMakeConversation={showMakeConversation}
           setShowMakeConversation={setShowMakeConversation}
         />
       )}
-
-      
     </div>
   );
 });

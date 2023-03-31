@@ -33,17 +33,17 @@ import { getStories } from "../../redux/actions/story";
 import { getUserInfo } from "../../redux/actions/info";
 import { io } from "socket.io-client";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 
 const favories = [
   'Lái máy bay' , "Bóng đá"
 ]
 function Profile() {
+  const skeleton = useFirstGoToPage();
   const { userId } = useParams();
     const dispatch = useDispatch();
     const editCoverPicRef = useRef();
     const imageUserRef = useRef();
-  const [skeleton, setSkeleton] = useState(true);
   const [showDescrip, setShowDescrip] = useState(false);
   const [valueDescrip , setValueDescrip] = useState("");
   const [userFavories, setUserFavories] = useState(favories);
@@ -75,13 +75,6 @@ function Profile() {
   useEffect(() => {
     socket.current.emit("addUser", currentUser.id);
   }, [currentUser]);
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 4 * 1000);
-  }, []);
- 
   useEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserFriends(userId));
@@ -156,7 +149,7 @@ function Profile() {
                   : `url(/uploads/${userProfile.coverPic})`,
               }}
             >
-              {isFirstLoading && skeleton ? (
+              {  skeleton ? (
                 <LoadingSkeleton />
               ) : (
                 <>
@@ -214,7 +207,7 @@ function Profile() {
               )}
             </div>
             <div className="profile__top__info__user">
-              {skeleton && isFirstLoading ? (
+              {skeleton  ? (
                 <LoadingSkeleton />
               ) : (
                 <>
@@ -327,7 +320,7 @@ function Profile() {
             </div>
             <div className="profile__top__info__desc">
               <div className="profile__top__info__desc__left">
-                {skeleton && isFirstLoading ? (
+                {skeleton  ? (
                   <LoadingSkeleton width={"100%"} height={"100%"} />
                 ) : (
                   <>
@@ -341,7 +334,7 @@ function Profile() {
                   </>
                 )}
               </div>
-              {!skeleton && !isFirstLoading && (
+              {!skeleton  && (
                 <div className="profile__top__info__desc__right">
                   <IoIosMore />
                 </div>

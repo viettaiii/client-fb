@@ -4,16 +4,17 @@ import { MdClose, MdDriveFileRenameOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import httpsRequest from "../../../api/axios";
 import { UserContext } from "../../../context/authContext";
+import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 import { updateUser } from "../../../redux/actions/user";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Spinner from "../Spinner";
-let isFirstLoading = true;
+
 const UpdateAvatar = ({ setShowModalUpdateAvatar }) => {
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
   });
-  const [skeleton, setSkeleton] = useState(true);
+  const skeleton = useFirstGoToPage();
   const [profilePic, setProfilePic] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
@@ -62,16 +63,11 @@ const UpdateAvatar = ({ setShowModalUpdateAvatar }) => {
       }, 3 * 1000);
     }
   };
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false)
-      isFirstLoading = false;
-    },(4 * 1000))
-  },[])
+ 
   return (
     <div className="modal-update-avatar">
       <div className="modal-update-avatar__wrapper">
-      {skeleton && isFirstLoading ? (
+      {skeleton  ? (
             <LoadingSkeleton height={"200px"} width="100%" />
           ) :
           <>

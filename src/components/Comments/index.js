@@ -11,15 +11,14 @@ import { addComment } from "../../redux/actions/comment";
 import Avatar from '../Avatar';
 import {useClickOutSide} from '../../hooks/useClickOutSide';
 import LoadingSkeleton from "../LoadingSkeleton";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 
 const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
 
 
-
+  const skeleton = useFirstGoToPage();
 
   const emojiRef = useRef();
-  const [skeleton, setSkeleton] = useState(true);
   const { currentUser } = useContext(UserContext);
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -42,12 +41,7 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
       setLoading(false);
     }, 1000);
   }, [showCommnent]);
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 3 * 1000);
-  }, []);
+  
   const handleSend = async () => {
     if (!value) return;
     await dispatch(addComment({ desc: value, postId: postId }));
@@ -64,7 +58,7 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
       <div className="comments__current-user">
         <>
           <span className="comments__current-user__image">
-            {skeleton && isFirstLoading ? (
+            {skeleton  ? (
               <LoadingSkeleton circle="true" />
             ) : (
               <Avatar image={currentUser.profilePic} alt={currentUser.firstName}/>
@@ -72,7 +66,7 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
             )}
           </span>
           <span className="comments__current-user__input">
-            {skeleton && isFirstLoading ? (
+            {skeleton  ? (
               <LoadingSkeleton height={50} />
             ) : (
               <input
@@ -86,7 +80,7 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
               />
             )}
 
-            {skeleton && isFirstLoading ? (
+            {skeleton  ? (
               <LoadingSkeleton />
             ) : (
               <span className="emoij">
@@ -103,7 +97,7 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
             )}
           </span>
          
-          {skeleton && isFirstLoading  ? <LoadingSkeleton height={40}/>: 
+          {skeleton   ? <LoadingSkeleton height={40}/>: 
           
           <button className="comments__current-user__send" onClick={handleSend}><BiSend /></button> }
            

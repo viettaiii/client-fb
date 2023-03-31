@@ -16,16 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {  getMessages } from "../../../redux/actions/messenge";
 import { io } from "socket.io-client";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
+import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 
-let isFirstLoading = true;
 function HeaderRight({ isHideMessage }) {
-  const [skeleton, setSkeleton] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 4 * 1000);
-  }, []);
+  const skeleton = useFirstGoToPage();
+ 
   const accountRef = useRef();
   const notificationRef = useRef();
   const chatRef = useRef();
@@ -59,7 +54,7 @@ function HeaderRight({ isHideMessage }) {
         className={`header__right__one ${showMenu ? "select" : ""} mobile-none`}
         title="menu"
       >
-        {skeleton && isFirstLoading ? (
+        {skeleton  ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -73,7 +68,7 @@ function HeaderRight({ isHideMessage }) {
         )}
       </div>
       <div className="header__right__one mobile-display screen-large-992-none">
-        {skeleton && isFirstLoading ? (
+        {skeleton  ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -86,7 +81,7 @@ function HeaderRight({ isHideMessage }) {
           className={`header__right__one ${showChat ? "select" : ""}`}
           title="chat"
         >
-          {skeleton && isFirstLoading ? (
+          {skeleton  ? (
             <LoadingSkeleton circle="true" />
           ) : (
             <>
@@ -107,7 +102,7 @@ function HeaderRight({ isHideMessage }) {
         className={`header__right__one ${showNotification ? "select" : ""}`}
         title="notifi"
       >
-        {skeleton && isFirstLoading ? (
+        {skeleton  ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -125,7 +120,7 @@ function HeaderRight({ isHideMessage }) {
         className={`header__right__one ${showAccountSetting ? "select" : ""}`}
         title="account"
       >
-        {skeleton && isFirstLoading ? (
+        {skeleton  ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>

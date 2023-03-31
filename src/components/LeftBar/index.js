@@ -9,14 +9,14 @@ import { routesPublic } from "../../config/routes";
 import { UserContext } from "../../context/authContext";
 import Avatar from "../Avatar";
 import LoadingSkeleton from "../LoadingSkeleton";
-let isFirstLoading = true;
-function LeftBar() {
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
+ function LeftBar() {
+  const skeleton = useFirstGoToPage();
   const { currentUser } = useContext(UserContext);
   const [items, setItems] = useState(imagesLeftBar.slice(0, 5));
   const [itemsShortcuts, setItemsShortcuts] = useState(
     imagesBottomLeftBar.slice(0, 5)
   );
-  const [skeleton, setSkeleton] = useState(true);
   const [showAdd, setShowAdd] = useState(true);
   const [shortcuts, setShortcuts] = useState(true);
 
@@ -36,15 +36,10 @@ function LeftBar() {
     setItemsShortcuts(imagesBottomLeftBar.slice(0, 5));
     setShortcuts(true);
   };
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false)
-      isFirstLoading = false;
-    },(4 * 1000))
-  },[])
+
   return (
     <div className="left-bar">
-        {isFirstLoading && skeleton ? <LoadingSkeleton height={"20%"} count={5}/> :
+        {skeleton ? <LoadingSkeleton height={"20%"} count={5}/> :
         
         <>
         <div className="left-bar__items">

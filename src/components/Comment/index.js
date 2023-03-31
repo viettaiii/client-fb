@@ -1,9 +1,8 @@
 import moment from "moment";
 import PropTypes from "prop-types";
 import { TfiClose } from "react-icons/tfi";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { useDispatch } from "react-redux";
-
 
 // Myimports
 import { deleteComment } from "../../redux/actions/comment";
@@ -11,19 +10,14 @@ import { UserContext } from "../../context/authContext";
 import EditComment from "../Modal/EditComment";
 import LoadingSkeleton from "../LoadingSkeleton";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
+
 function Comment({ comment, postId }) {
   const editRef = useRef();
-  const [skeleton, setSkeleton] = useState(true);
+  const skeleton = useFirstGoToPage();
   const [showEditComment, setShowEditComment] = useClickOutSide(editRef);
   const { currentUser } = useContext(UserContext);
   const dispatch = useDispatch();
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 3 * 1000);
-  }, []);
 
   return (
     <>
@@ -33,7 +27,7 @@ function Comment({ comment, postId }) {
         <div>
           <div className="comments__comment">
             <span className="comments__comment__image">
-              {skeleton && isFirstLoading ? (
+              {skeleton ? (
                 <LoadingSkeleton circle="true" />
               ) : (
                 <img src={"/uploads/" + comment.profilePic} alt="" />
@@ -43,23 +37,15 @@ function Comment({ comment, postId }) {
             <div className="comments__comment__wrapper">
               <span className="comments__comment__info">
                 <span className="comments__comment__info__name">
-                  {skeleton && isFirstLoading ? (
+                  {skeleton ? (
                     <LoadingSkeleton />
                   ) : (
                     comment.firstName + " " + comment.lastName
                   )}
                 </span>
-                  <p>
-                {skeleton && isFirstLoading ? (
-                  <LoadingSkeleton width={100} />
-                ) : (
-                  
-                  comment.desc
-                  
-                  
-                  
-                )}
-                  </p>
+                <p>
+                  {skeleton ? <LoadingSkeleton width={100} /> : comment.desc}
+                </p>
               </span>
               {comment.userId === currentUser.id && (
                 <>
@@ -68,21 +54,13 @@ function Comment({ comment, postId }) {
                       className="comments__comment__options__edit"
                       onClick={() => setShowEditComment(true)}
                     >
-                      {skeleton && isFirstLoading ? (
-                        <LoadingSkeleton />
-                      ) : (
-                        <>Chỉnh sửa</>
-                      )}
+                      {skeleton ? <LoadingSkeleton /> : <>Chỉnh sửa</>}
                     </span>
                     <span
                       className="comments__comment__options__delete"
                       onClick={() => dispatch(deleteComment(comment.id))}
                     >
-                      {skeleton && isFirstLoading ? (
-                        <LoadingSkeleton />
-                      ) : (
-                        <TfiClose />
-                      )}
+                      {skeleton ? <LoadingSkeleton /> : <TfiClose />}
                     </span>
                   </div>
                 </>
@@ -90,17 +68,16 @@ function Comment({ comment, postId }) {
             </div>
 
             <span className="comments__comment__createdAt">
-            {skeleton && isFirstLoading ? (
-                        <LoadingSkeleton width={30} height={20}/>
-                      ) : (
-                        moment(comment.createdAt).fromNow("mm")
-                      )}
-            
+              {skeleton ? (
+                <LoadingSkeleton width={30} height={20} />
+              ) : (
+                moment(comment.createdAt).fromNow("mm")
+              )}
             </span>
           </div>
           {showEditComment && (
             <EditComment
-            ref={editRef}
+              ref={editRef}
               id={comment.id}
               setShowEditComment={setShowEditComment}
               desc={comment.desc}
@@ -113,7 +90,7 @@ function Comment({ comment, postId }) {
 }
 
 Comment.propTypes = {
-  comment : PropTypes.object,
-   postId : PropTypes.string || PropTypes.number
-}
+  comment: PropTypes.object,
+  postId: PropTypes.string || PropTypes.number,
+};
 export default Comment;

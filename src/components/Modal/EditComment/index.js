@@ -6,22 +6,16 @@ import { useDispatch } from "react-redux";
 import "./edit-comment.scss";
 import { updateComment } from "../../../redux/actions/comment";
 import Spinner from "../Spinner";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 const EditComment = forwardRef(( {desc, id, setShowEditComment },ref) => {
-
+  const skeleton = useFirstGoToPage();
 
   const { currentUser } = useContext(UserContext);
-  const [skeleton, setSkeleton] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [value, setValue] = useState(desc);
   
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setSkeleton(false);
-  //     isFirstLoading = false;
-  //   }, 3 * 1000);
-  // }, []);
+ 
   const handleUpdate = async () => {
     if (desc.trim() === value.trim()) return;
     setShowSpinner(true);

@@ -4,7 +4,7 @@ import { FaFont } from "react-icons/fa";
 import { GoTextSize } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 // -my imports
 import "./create.scss";
@@ -18,10 +18,11 @@ import { addStory } from "../../../redux/actions/story";
 import Spinner from "../../Modal/Spinner";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
-let isFirstLoading = true;
+import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 function Create() {
+  const skeleton = useFirstGoToPage();
   const { currentUser } = useContext(UserContext);
-  const [skeleton, setSkeleton] = useState(true);
+
   const [addDesc, setAddDesc] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const [file, setFile] = useState(null);
@@ -29,12 +30,7 @@ function Create() {
   const descRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    setTimeout(() => {
-      setSkeleton(false);
-      isFirstLoading = false;
-    }, 4 * 1000);
-  }, []);
+
   const handleCancle = () => {
     setAddDesc(false);
     setFile(null);
@@ -73,18 +69,14 @@ function Create() {
             to={routesPublic.home}
             className="stories-create__left__header__close"
           >
-            {isFirstLoading && skeleton ? (
-              <LoadingSkeleton circle="true" />
-            ) : (
-              <AiOutlineClose />
-            )}
+            {skeleton ? <LoadingSkeleton circle="true" /> : <AiOutlineClose />}
           </Link>
           <Link
             to={routesPublic.home}
             className="stories-create__left__header__img"
           >
             {" "}
-            {isFirstLoading && skeleton ? (
+            {skeleton ? (
               <LoadingSkeleton circle="true" />
             ) : (
               <img src="/logo.png" alt="" />
@@ -93,7 +85,7 @@ function Create() {
         </div>
         <div className="stories-create__left__setting">
           <div className="stories-create__left__setting__title">
-            {isFirstLoading && skeleton ? (
+            {skeleton ? (
               <LoadingSkeleton width={"80%"} />
             ) : (
               <h5>Tin của bạn</h5>
@@ -103,7 +95,7 @@ function Create() {
               className="stories-create__left__setting__title__icon"
               onClick={() => alert("Chưa làm chức năng này!")}
             >
-              {isFirstLoading && skeleton ? (
+              {skeleton ? (
                 <LoadingSkeleton circle={"true"} />
               ) : (
                 <AiFillSetting />
@@ -115,9 +107,20 @@ function Create() {
             to={routesPublic.profile + "/" + currentUser.id}
             className="stories-create__left__setting__user"
           >
-           {isFirstLoading && skeleton ? <LoadingSkeleton  count={2}/>: <> <Avatar image={currentUser.profilePic} alt={currentUser.fistName} />
-            <span>{currentUser.firstName + " " + currentUser.lastName}</span></>}
-           
+            {skeleton ? (
+              <LoadingSkeleton count={2} />
+            ) : (
+              <>
+                {" "}
+                <Avatar
+                  image={currentUser.profilePic}
+                  alt={currentUser.fistName}
+                />
+                <span>
+                  {currentUser.firstName + " " + currentUser.lastName}
+                </span>
+              </>
+            )}
           </Link>
         </div>
         {file && (
@@ -145,73 +148,78 @@ function Create() {
         )}
       </div>
       <div className="stories-create__right">
-      {isFirstLoading && skeleton ? <LoadingSkeleton/>: 
-      <>
-      {file ? (
-          <div className="stories-create__right__box">
-            <p className="stories-create__right__box__title">Xem trước</p>
-            <div className="stories-create__right__box__background">
-              <span className="stories-create__right__box__background__image">
-                {file.name.endsWith(".mov") ||
-                file.name.endsWith(".mp3") ||
-                file.name.endsWith(".mp4") ? (
-                  <video
-                    ref={imageRef}
-                    src={URL.createObjectURL(file)}
-                    alt=""
-                  ></video>
-                ) : (
-                  <img ref={imageRef} src={URL.createObjectURL(file)} alt="" />
-                )}
-                {addDesc && (
-                  <div>
-                    <blockquote className="stories-create__right__box__background__image__desc">
-                      <p
-                        data-placeholder="Bắt đầu nhập..."
-                        contenteditable="true"
-                        ref={descRef}
-                      ></p>
-                    </blockquote>
-                  </div>
-                )}
-              </span>
-            </div>
-          </div>
+        {skeleton ? (
+          <LoadingSkeleton />
         ) : (
           <>
-            <label
-              htmlFor="stories-create-file"
-              className="stories-create__right__create stories-create__right__create--image"
-            >
-              <p>
-                <BsImageFill />
-              </p>
-              <span>Tạo tin ảnh</span>
-            </label>
-
-            <input
-              type="file"
-              id="stories-create-file"
-              hidden
-              onChange={(e) => setFile(e.target.files[0])}
-            />
-
-            <div className="stories-create__right__create stories-create__right__create--text">
+            {file ? (
+              <div className="stories-create__right__box">
+                <p className="stories-create__right__box__title">Xem trước</p>
+                <div className="stories-create__right__box__background">
+                  <span className="stories-create__right__box__background__image">
+                    {file.name.endsWith(".mov") ||
+                    file.name.endsWith(".mp3") ||
+                    file.name.endsWith(".mp4") ? (
+                      <video
+                        ref={imageRef}
+                        src={URL.createObjectURL(file)}
+                        alt=""
+                      ></video>
+                    ) : (
+                      <img
+                        ref={imageRef}
+                        src={URL.createObjectURL(file)}
+                        alt=""
+                      />
+                    )}
+                    {addDesc && (
+                      <div>
+                        <blockquote className="stories-create__right__box__background__image__desc">
+                          <p
+                            data-placeholder="Bắt đầu nhập..."
+                            contenteditable="true"
+                            ref={descRef}
+                          ></p>
+                        </blockquote>
+                      </div>
+                    )}
+                  </span>
+                </div>
+              </div>
+            ) : (
               <>
-                <p>
-                  <FaFont />
-                </p>
-                <span>Tạo tin dạng văn bảng</span>
+                <label
+                  htmlFor="stories-create-file"
+                  className="stories-create__right__create stories-create__right__create--image"
+                >
+                  <p>
+                    <BsImageFill />
+                  </p>
+                  <span>Tạo tin ảnh</span>
+                </label>
+
+                <input
+                  type="file"
+                  id="stories-create-file"
+                  hidden
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+
+                <div className="stories-create__right__create stories-create__right__create--text">
+                  <>
+                    <p>
+                      <FaFont />
+                    </p>
+                    <span>Tạo tin dạng văn bảng</span>
+                  </>
+                </div>
               </>
-            </div>
+            )}
           </>
         )}
-      </>}
-
       </div>
       <div className="stories-create__right-header">
-          <HeaderRight isHideMessage={true} />
-        
+        <HeaderRight isHideMessage={true} />
       </div>
       <Link
         to={routesPublic.home}
