@@ -18,7 +18,6 @@ function Comment({ comment, postId }) {
   const [showEditComment, setShowEditComment] = useClickOutSide(editRef);
   const { currentUser } = useContext(UserContext);
   const dispatch = useDispatch();
-
   return (
     <>
       {postId !== comment.postId ? (

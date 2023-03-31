@@ -47,7 +47,6 @@ function Future({ future, fcShowFutures, typeOther }) {
         alert("Chức năng này chưa có,quay trở lại thử chức năng khác nhé");
     }
   };
-
   const handleSetOff = () => {
     if(!darkMode ) return ;
     toggleDarkMode()

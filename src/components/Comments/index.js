@@ -8,38 +8,24 @@ import Comment from "../Comment";
 import { UserContext } from "../../context/authContext";
 import { useDispatch } from "react-redux";
 import { addComment } from "../../redux/actions/comment";
-import Avatar from '../Avatar';
-import {useClickOutSide} from '../../hooks/useClickOutSide';
+import Avatar from "../Avatar";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 import LoadingSkeleton from "../LoadingSkeleton";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 
-const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
-
-
+const Commnents = forwardRef(({ comments, postId }, ref) => {
   const skeleton = useFirstGoToPage();
-
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
   const [showEmoji, handleClick] = useClickOutSide(emojiRef);
-  const [loading, setLoading] = useState(false);
-  const handleEmoijClick = (event, emoij) => {
+  const handleEmoijClick = (event) => {
     setValue((prev) => prev + event.emoji);
   };
- 
- 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, [showCommnent]);
-  
   const handleSend = async () => {
     if (!value) return;
     await dispatch(addComment({ desc: value, postId: postId }));
@@ -56,15 +42,17 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
       <div className="comments__current-user">
         <>
           <span className="comments__current-user__image">
-            {skeleton  ? (
+            {skeleton ? (
               <LoadingSkeleton circle="true" />
             ) : (
-              <Avatar image={currentUser.profilePic} alt={currentUser.firstName}/>
-             
+              <Avatar
+                image={currentUser.profilePic}
+                alt={currentUser.firstName}
+              />
             )}
           </span>
           <span className="comments__current-user__input">
-            {skeleton  ? (
+            {skeleton ? (
               <LoadingSkeleton height={50} />
             ) : (
               <input
@@ -78,12 +66,11 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
               />
             )}
 
-            {skeleton  ? (
+            {skeleton ? (
               <LoadingSkeleton />
             ) : (
               <span className="emoij">
                 <MdInsertEmoticon onClick={handleClick} />
-                
               </span>
             )}
             {showEmoji && (
@@ -94,16 +81,21 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
               />
             )}
           </span>
-         
-          {skeleton   ? <LoadingSkeleton height={40}/>: 
-          
-          <button className="comments__current-user__send" onClick={handleSend}><BiSend /></button> }
-           
-          
+
+          {skeleton ? (
+            <LoadingSkeleton height={40} />
+          ) : (
+            <button
+              className="comments__current-user__send"
+              onClick={handleSend}
+            >
+              <BiSend />
+            </button>
+          )}
         </>
       </div>
     </div>
   );
-})
+});
 
 export default Commnents;

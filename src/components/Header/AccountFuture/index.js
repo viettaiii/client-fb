@@ -13,14 +13,12 @@ import {
   screenFutures,
 } from "../../../assets/futures";
 import { UserContext } from "../../../context/authContext";
-
 const AccountFuture = forwardRef(({ setShowAccountSetting }, ref) => {
   const [showFuturesAccount, setShowFuturesAccount] = useState(true);
   const [showFuturesSetting, setShowFuturesSetting] = useState(false);
   const [showFuturesHelper, setShowFuturesHelper] = useState(false);
   const [showFuturesDarkMode, setShowFuturesDarkMode] = useState(false);
   const {currentUser} = useContext(UserContext);
- 
   return (
     <div className="account" ref={ref}>
       {showFuturesAccount && (
