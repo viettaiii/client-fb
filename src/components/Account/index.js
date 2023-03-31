@@ -1,39 +1,17 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
-import { getUserAxios } from "../../api/method";
-import { UserContext } from "../../context/authContext";
+import { useSocket } from "../../hooks/useSocket";
+import { useUserFriend } from "../../hooks/useUserFriend";
 import Avatar from "../Avatar";
 
 function Account({ conversation }) {
-  const [user, setUser] = useState({});
-  const [usersOn, setUsersOn] = useState([]);
-  const { currentUser } = useContext(UserContext);
-  useEffect(() => {
-    const { id, ...others } = conversation;
-    const friendId = Object.values(others).find(
-      (userId) => userId !== currentUser.id
-    );
-    const getUser = async () => {
-      const data = await getUserAxios(friendId);
-      setUser(data);
-    };
-    getUser();
-  }, [conversation]);
-  const socket = useRef();
-  useEffect(() => {
-    socket.current = io('ws://localhost:9111');
-  },[])
-  useEffect(() => {
-    socket.current.emit("addUser" , currentUser.id);
-    socket.current.on("getUsers", (users) => {
-      setUsersOn(users);
-    });
-  },[currentUser])
+  const [usersOn] = useSocket();
+  const user = useUserFriend(conversation);
   return (
     <div className="chat__accounts__account">
       <div className="chat__accounts__account__avatar">
         <Avatar image={user.profilePic} alt={user.firstName} />
-      {usersOn.includes(user.id) && <span className="chat__accounts__account__avatar__status"/>}  
+        {usersOn.includes(user.id) && (
+          <span className="chat__accounts__account__avatar__status" />
+        )}
       </div>
       <div className="chat__accounts__account__right">
         <span className="chat__accounts__account__right__name">

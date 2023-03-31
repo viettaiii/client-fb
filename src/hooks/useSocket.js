@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import { UserContext } from "../context/authContext";
-import { addMessage} from "../redux/actions/messenge";
+import { addMessage } from "../redux/actions/messenge";
 
 export function useSocket() {
   const { currentUser } = useContext(UserContext);
@@ -18,17 +18,15 @@ export function useSocket() {
       receiverId: data.receiverId,
     });
   }
-
   useEffect(() => {
     socket.current = io("ws://localhost:9111");
   }, []);
   useEffect(() => {
     socket.current.emit("addUser", currentUser.id);
     socket.current.on("getUsers", (users) => {
-      setUsersOn(users.map(u => u.userId));
+      setUsersOn(users.map((u) => u.userId));
     });
   }, [currentUser]);
-
   useEffect(() => {
     socket.current.on("getMessage", (data) => {
       setArrivalMess({
@@ -49,5 +47,5 @@ export function useSocket() {
     }
   }, [arrivalMess]);
 
-  return [ usersOn, handleSendMessage];
+  return [usersOn, handleSendMessage];
 }

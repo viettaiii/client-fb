@@ -23,33 +23,21 @@ import {
 import Avatar from "../Avatar";
 import "./right-bar.scss";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
+import { useSocket } from "../../hooks/useSocket";
 
 function RightBar() {
   const skeleton = useFirstGoToPage();
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userOthers } = useSelector((state) => state.userOthers);
-  const [usersOn, setUsersOn] = useState([]);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
-
+  const [usersOn] = useSocket();
   const dispatch = useDispatch();
   const { currentUser } = useContext(UserContext);
-  const socket = useRef();
-
-  useEffect(() => {
-    socket.current = io("ws://localhost:9111");
-  }, []);
-  useEffect(() => {
-    socket.current.emit("addUser", currentUser.id);
-    socket.current.on("getUsers", (users) => {
-      setUsersOn(users);
-    });
-  }, [currentUser]);
   useEffect(() => {
     dispatch(getUserFriends(currentUser.id));
     dispatch(getUserOthers(currentUser.id));
     dispatch(getFriendsRequest());
   }, [dispatch]);
-
   const handleAddFriend = async (userId_2) => {
     await dispatch(addUserFriend({ userId_1: currentUser.id, userId_2 }));
     await dispatch(

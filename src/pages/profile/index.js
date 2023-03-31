@@ -31,7 +31,6 @@ import { TiShoppingBag } from "react-icons/ti";
 import SpinnerEllipsis from "../../components/Modal/SpinnerEllipsis";
 import { getStories } from "../../redux/actions/story";
 import { getUserInfo } from "../../redux/actions/info";
-import { io } from "socket.io-client";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 
@@ -59,22 +58,13 @@ function Profile() {
   const [coverPic, setCoverPic] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const { currentUser, update } = useContext(UserContext);
- 
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userProfile } = useSelector((state) => state.userProfile);
- 
-
   useEffect(() => {
     dispatch(getStories());
     dispatch(getUserInfo(userId))
   }, [dispatch]);
-  const socket = useRef();
-  useEffect(() => {
-    socket.current = io("ws://localhost:9111");
-  }, []);
-  useEffect(() => {
-    socket.current.emit("addUser", currentUser.id);
-  }, [currentUser]);
+ 
   useEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserFriends(userId));

@@ -12,15 +12,15 @@ import Menu from "../../Menu";
 import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import {  getMessages } from "../../../redux/actions/messenge";
-import { io } from "socket.io-client";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
+import { useSocket } from "../../../hooks/useSocket";
 
 function HeaderRight({ isHideMessage }) {
   const skeleton = useFirstGoToPage();
- 
+  const [usersOn] = useSocket();
   const accountRef = useRef();
   const notificationRef = useRef();
   const chatRef = useRef();
@@ -31,19 +31,8 @@ function HeaderRight({ isHideMessage }) {
   const [showNotification, setShowNotification] = useClickOutSide(notificationRef);
   const [showChat, setShowChat] = useClickOutSide(chatRef);
   const [showMenu, setShowMenu] = useClickOutSide(menuRef);
-  const [usersOn, setUsersOn] = useState([]);
-  
-  const { messenges } = useSelector((state) => state.messenges);
   const dispatch = useDispatch();
-  const socket = useRef();
-  useEffect(() => {
-    socket.current = io("ws://localhost:9111");
-  }, []);
-  useEffect(() => {
-    socket.current.on("getUsers", (users) => {
-      setUsersOn(users);
-    });
-  }, [currentUser]);
+ 
   useEffect(() => {
     currentMess && dispatch(getMessages(currentMess.id));
   }, [currentMess]);

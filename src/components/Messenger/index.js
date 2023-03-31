@@ -10,7 +10,6 @@ import { getMessages } from "../../redux/actions/messenge";
 import "./messenger.scss";
 import { useSocket } from "../../hooks/useSocket";
 function Messenger() {
-  
   const dispatch = useDispatch();
   const [currentMess, setCurrentMess] = useState();
   const { conversations } = useSelector((state) => state.conversations);
@@ -21,7 +20,6 @@ function Messenger() {
     conversations.length > 0 &&
       dispatch(getMessages(conversations[0].id));
   }, []);
-
   useEffect(() => {
     if (!currentMess) setCurrentMess(conversations[0]);
     currentMess && dispatch(getMessages(currentMess.id));
