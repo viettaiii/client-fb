@@ -1,6 +1,6 @@
 import "./profile.scss";
 import { Link, useParams } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { CiImageOn, CiLocationOn, CiTrash, CiWifiOn } from "react-icons/ci";
 import { IoIosMore, IoMdAdd } from "react-icons/io";
@@ -33,26 +33,30 @@ import { getStories } from "../../redux/actions/story";
 import { getUserInfo } from "../../redux/actions/info";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
-
 const favories = [
   'Lái máy bay' , "Bóng đá"
 ]
 function Profile() {
   const skeleton = useFirstGoToPage();
+  const editCoverPicRef = useRef();
+    const imageUserRef = useRef();
+    const updateAvatarRef = useRef();
+    const todosFavoriteRef = useRef();
+    const [showEditCoverPic, setShowEditCoverPic] = useClickOutSide(editCoverPicRef);
+    const [showImageUser, setShowImageUser] = useClickOutSide(imageUserRef);
+
   const { userId } = useParams();
     const dispatch = useDispatch();
-    const editCoverPicRef = useRef();
-    const imageUserRef = useRef();
+    
   const [showDescrip, setShowDescrip] = useState(false);
   const [valueDescrip , setValueDescrip] = useState("");
   const [userFavories, setUserFavories] = useState(favories);
   const { stories } = useSelector((state) => state.stories);
-  const [modalTodoFavorite, setModalTodoFavorite] = useState(false);
+  const [modalTodoFavorite,setModalTodoFavorite] = useClickOutSide(todosFavoriteRef);
   const [showSpinnerEllipsis, setShowSpinnerEllipsis] = useState(true);
-  const [showEditCoverPic, setShowEditCoverPic] = useClickOutSide(editCoverPicRef);
-  const [showImageUser, setShowImageUser] = useClickOutSide(imageUserRef);
+  
   const [showModalRemove, setShowModalRemove] = useState(false);
-  const [showModalUpdateAvatar, setShowModalUpdateAvatar] = useState(false);
+  const [showModalUpdateAvatar,setShowModalUpdateAvatar] = useClickOutSide(updateAvatarRef);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
   const { userInfo } = useSelector((state) => state.userInfo);
   const [coverPic, setCoverPic] = useState(null);
@@ -70,7 +74,8 @@ function Profile() {
     dispatch(getUserFriends(userId));
     dispatch(getFriendsRequest());
   }, [userId]);
-  const handleCoverPic = async (e) => {
+  const handleCoverPic =  (e) => {
+    console.log(e);
     setShowSpinner(true);
     setTimeout(() => {
       setCoverPic(e.target.files[0]);
@@ -133,6 +138,7 @@ function Profile() {
           <div className="profile__top__info">
             <div
               className="profile__top__info__cover-pic"
+              
               style={{
                 backgroundImage: coverPic
                   ? `url(${URL.createObjectURL(coverPic)})`
@@ -149,7 +155,7 @@ function Profile() {
                         !userProfile.coverPic ? "no-cover" : ""
                       }`}
                       onClick={() => setShowEditCoverPic(true)}
-                      ref={editCoverPicRef}
+                      
                     >
                       {
                         <AiFillCamera
@@ -160,8 +166,8 @@ function Profile() {
                       <span className="tablet-none">
                         <FaCamera /> Chỉnh sửa ảnh bìa
                       </span>
-                      {!showImageUser && showEditCoverPic && (
-                        <div className="profile__top__info__cover-pic__edit__modal">
+                      {showEditCoverPic && (
+                        <div className="profile__top__info__cover-pic__edit__modal" ref={editCoverPicRef}>
                           <span
                             className="profile__top__info__cover-pic__edit__modal__one"
                             onClick={() => {
@@ -472,13 +478,14 @@ function Profile() {
       </div>
       {showModalUpdateAvatar && (
         <UpdateAvatar
+          ref={updateAvatarRef}
           userProfile={userProfile}
           setShowModalUpdateAvatar={setShowModalUpdateAvatar}
         />
       )}
 
       {modalTodoFavorite && (
-        <ModalTodosFavorite userFavories={userFavories} setUserFavories={setUserFavories} setModalTodoFavorite={setModalTodoFavorite} />
+        <ModalTodosFavorite ref={todosFavoriteRef} userFavories={userFavories} setUserFavories={setUserFavories} setModalTodoFavorite={setModalTodoFavorite} />
       )}
     </>
   );
@@ -521,7 +528,7 @@ const UpdateCoverPic = ({ setCoverPic, handleSave }) => {
   );
 };
 
-const ModalTodosFavorite = ({ setModalTodoFavorite , setUserFavories , userFavories }) => {
+const ModalTodosFavorite = forwardRef(({ setModalTodoFavorite , setUserFavories , userFavories } , ref) => {
     const [value , setValue] = useState();
     const [newFavorites , setNewFavorites]= useState(userFavories);
     const handleAdd=(e) => {
@@ -536,7 +543,7 @@ const ModalTodosFavorite = ({ setModalTodoFavorite , setUserFavories , userFavor
     }
   return (
     <div className="modal-favorite">
-      <div className="modal-favorite__container">
+      <div className="modal-favorite__container" ref={ref}>
         <div className="modal-favorite__container__header">
           <h3>Sở thích</h3>
           <span onClick={() => setModalTodoFavorite(false)}>X</span>
@@ -594,5 +601,5 @@ const ModalTodosFavorite = ({ setModalTodoFavorite , setUserFavories , userFavor
       </div>
     </div>
   );
-};
+});
 export default Profile;

@@ -21,7 +21,7 @@ import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
   const skeleton = useFirstGoToPage();
   const emojiRef = useRef();
-  const [showEmoji, handleClick] = useClickOutSide(emojiRef);
+  const [showEmoji,_, handleClick] = useClickOutSide(emojiRef);
   const { currentUser } = useContext(UserContext);
  
   const [desc, setDesc] = useState("");

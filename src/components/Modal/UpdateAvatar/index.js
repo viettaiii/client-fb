@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { forwardRef, useContext, useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdClose, MdDriveFileRenameOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,11 @@ import { updateUser } from "../../../redux/actions/user";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Spinner from "../Spinner";
 
-const UpdateAvatar = ({ setShowModalUpdateAvatar }) => {
+
+
+
+const UpdateAvatar = forwardRef(( {setShowModalUpdateAvatar} ,ref) => {
+
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
@@ -66,7 +70,7 @@ const UpdateAvatar = ({ setShowModalUpdateAvatar }) => {
  
   return (
     <div className="modal-update-avatar">
-      <div className="modal-update-avatar__wrapper">
+      <div className="modal-update-avatar__wrapper" ref={ref}>
       {skeleton  ? (
             <LoadingSkeleton height={"200px"} width="100%" />
           ) :
@@ -149,6 +153,6 @@ const UpdateAvatar = ({ setShowModalUpdateAvatar }) => {
       </div>
     </div>
   );
-};
+})
 
 export default UpdateAvatar;

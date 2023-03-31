@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 export function useClickOutSide(ref) {
     const [show , setShow] = useState(false);
-
     function handleClickOutside(event) {
       if (
           ref.current &&
@@ -23,5 +22,5 @@ export function useClickOutSide(ref) {
           };
     
     },[ref])
-    return [ show ,handleClick];
+    return [ show  , setShow,handleClick];
 }
