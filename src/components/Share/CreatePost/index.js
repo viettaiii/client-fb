@@ -16,9 +16,11 @@ import { addPost } from "../../../redux/actions/post";
 import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
+import { useClickOutSide } from "../../../hooks/useClickOutSide";
 let isFirstLoading = true;
 const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
-  const [showEmoji, setShowEmoji] = useState(false);
+  const emojiRef = useRef();
+  const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
   const { currentUser } = useContext(UserContext);
   const [skeleton, setSkeleton] = useState(true);
   const [desc, setDesc] = useState("");
@@ -30,18 +32,7 @@ const CreatePost = forwardRef(({ setShowCreateShare, setShowSpinner }, ref) => {
   const handleChange = (e) => {
     setDesc(e.target.value);
   };
-  const emojiRef = useRef();
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (emojiRef.current && !emojiRef.current.contains(event.target)) {
-        setShowEmoji(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [emojiRef]);
+  
   const handleClick = (e) => {
     setShowEmoji(!showEmoji);
   };

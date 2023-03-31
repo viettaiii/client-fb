@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { UserContext } from "../../../context/authContext";
@@ -7,12 +7,14 @@ import "./edit-comment.scss";
 import { updateComment } from "../../../redux/actions/comment";
 import Spinner from "../Spinner";
 let isFirstLoading = true;
-const EditComment = ({ desc, id, setShowEditComment }) => {
+const EditComment = forwardRef(( {desc, id, setShowEditComment },ref) => {
+
+
   const { currentUser } = useContext(UserContext);
   const [skeleton, setSkeleton] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [value, setValue] = useState(desc);
-  const editRef = useRef();
+  
   const dispatch = useDispatch();
   // useEffect(() => {
   //   setTimeout(() => {
@@ -29,20 +31,10 @@ const EditComment = ({ desc, id, setShowEditComment }) => {
       setShowEditComment(false);
     }, 2 * 1000);
   };
-  useEffect(() => {
-    function handleClickOutsideAccount(e) {
-      if (editRef.current && !editRef.current.contains(e.target)) {
-        setShowEditComment(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutsideAccount);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideAccount);
-    };
-  }, [editRef]);
+ 
   return (
     <div className="edit-comment">
-      <span ref={editRef}>
+      <span ref={ref}>
         <div className="edit-comment__wrap">
           <div className="edit-comment__wrap__avatar">
             <img src={"/uploads/" + currentUser.profilePic} alt="" />
@@ -73,7 +65,7 @@ const EditComment = ({ desc, id, setShowEditComment }) => {
       {showSpinner && <Spinner />}
     </div>
   );
-};
+})
 
 EditComment.propTypes = {
   desc : PropTypes.string,

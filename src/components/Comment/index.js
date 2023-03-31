@@ -1,7 +1,7 @@
 import moment from "moment";
 import PropTypes from "prop-types";
 import { TfiClose } from "react-icons/tfi";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
 
@@ -10,12 +10,13 @@ import { deleteComment } from "../../redux/actions/comment";
 import { UserContext } from "../../context/authContext";
 import EditComment from "../Modal/EditComment";
 import LoadingSkeleton from "../LoadingSkeleton";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 let isFirstLoading = true;
 function Comment({ comment, postId }) {
+  const editRef = useRef();
   const [skeleton, setSkeleton] = useState(true);
-  const [showEditComment, setShowEditComment] = useState(false);
+  const [showEditComment, setShowEditComment] = useClickOutSide(editRef);
   const { currentUser } = useContext(UserContext);
-
   const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
@@ -99,6 +100,7 @@ function Comment({ comment, postId }) {
           </div>
           {showEditComment && (
             <EditComment
+            ref={editRef}
               id={comment.id}
               setShowEditComment={setShowEditComment}
               desc={comment.desc}

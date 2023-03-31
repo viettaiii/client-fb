@@ -32,6 +32,7 @@ import SpinnerEllipsis from "../../components/Modal/SpinnerEllipsis";
 import { getStories } from "../../redux/actions/story";
 import { getUserInfo } from "../../redux/actions/info";
 import { io } from "socket.io-client";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 let isFirstLoading = true;
 
 const favories = [
@@ -40,6 +41,8 @@ const favories = [
 function Profile() {
   const { userId } = useParams();
     const dispatch = useDispatch();
+    const editCoverPicRef = useRef();
+    const imageUserRef = useRef();
   const [skeleton, setSkeleton] = useState(true);
   const [showDescrip, setShowDescrip] = useState(false);
   const [valueDescrip , setValueDescrip] = useState("");
@@ -47,8 +50,8 @@ function Profile() {
   const { stories } = useSelector((state) => state.stories);
   const [modalTodoFavorite, setModalTodoFavorite] = useState(false);
   const [showSpinnerEllipsis, setShowSpinnerEllipsis] = useState(true);
-  const [showEditCoverPic, setShowEditCoverPic] = useState(false);
-  const [showImageUser, setShowImageUser] = useState(false);
+  const [showEditCoverPic, setShowEditCoverPic] = useClickOutSide(editCoverPicRef);
+  const [showImageUser, setShowImageUser] = useClickOutSide(imageUserRef);
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showModalUpdateAvatar, setShowModalUpdateAvatar] = useState(false);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
@@ -59,8 +62,8 @@ function Profile() {
  
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userProfile } = useSelector((state) => state.userProfile);
-  const editCoverPicRef = useRef();
-  const imageUserRef = useRef();
+ 
+
   useEffect(() => {
     dispatch(getStories());
     dispatch(getUserInfo(userId))
@@ -78,36 +81,7 @@ function Profile() {
       isFirstLoading = false;
     }, 4 * 1000);
   }, []);
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        editCoverPicRef.current &&
-        !editCoverPicRef.current.contains(event.target)
-      ) {
-        setShowEditCoverPic(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [editCoverPicRef]);
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        imageUserRef.current &&
-        !imageUserRef.current.contains(event.target)
-      ) {
-        setShowImageUser(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [imageUserRef]);
+ 
   useEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserFriends(userId));

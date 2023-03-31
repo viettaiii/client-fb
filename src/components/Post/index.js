@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 /// _my imports
 import "./post.scss";
 import Commnents from "../Comments";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { getComments } from "../../redux/actions/comment";
@@ -18,15 +18,17 @@ import { UserContext } from "../../context/authContext";
 import { deletePost } from "../../redux/actions/post";
 import LoadingSkeleton from "../LoadingSkeleton";
 import Avatar from "../Avatar";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 let isFirstLoading = true;
 function Post({ post }) {
-  const [showCommnent, setShowComment] = useState(false);
+  const commentsRef = useRef();
   const { currentUser } = useContext(UserContext);
   const [skeleton, setSkeleton] = useState(true);
   const commentsRe = useSelector((state) => state.comments);
   const { isLoading, comments } = commentsRe;
   const likesRe = useSelector((state) => state.likes);
   const { likes } = likesRe;
+  const [showCommnent, setShowComment] = useClickOutSide(commentsRef);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getComments());
@@ -175,10 +177,10 @@ function Post({ post }) {
         ? "Loading..."
         : showCommnent && (
             <Commnents
+             ref={commentsRef}
               postId={post.id}
               comments={comments}
               showCommnent={showCommnent}
-              setShowComment={setShowComment}
             />
           )}
     </div>

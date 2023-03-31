@@ -1,36 +1,30 @@
-import { useEffect, useRef} from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { getUsers } from "../../../redux/actions/user";
 import Avatar from "../../Avatar";
 import "./make-conversation.scss";
 
-
-function MakeConversation({
-  usersOn ,setShowMakeConversation
-}) {
-
+const MakeConversation = forwardRef(({ usersOn  , setShowMakeConversation}, ref) => {
   const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUsers());
   }, []);
   const MakeConversationRef = useRef();
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (MakeConversationRef.current && !MakeConversationRef.current.contains(event.target)) {
-        setShowMakeConversation(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [MakeConversationRef]);
+
   return (
     <div className="modal-make-conversation">
-      <div className="make-conversation" ref={MakeConversationRef}>
-        <h3>Danh sách người dùng trên facebook. <span className="make-conversation__close" onClick={() =>setShowMakeConversation(false)}><AiOutlineCloseCircle/></span></h3>
+      <div className="make-conversation" ref={ref}>
+        <h3>
+          Danh sách người dùng trên facebook.{" "}
+          <span
+            className="make-conversation__close"
+            onClick={() => setShowMakeConversation(false)}
+          >
+            <AiOutlineCloseCircle />
+          </span>
+        </h3>
         <h5>Đang hoạt động</h5>
         <div className="make-conversation__list-users">
           {users
@@ -84,7 +78,5 @@ function MakeConversation({
       </div>
     </div>
   );
-}
-
-
+});
 export default MakeConversation;

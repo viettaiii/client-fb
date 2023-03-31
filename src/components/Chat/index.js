@@ -7,7 +7,7 @@ import {
 } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 //-My imports
 import "./chat.scss";
 import { useState } from "react";
@@ -16,12 +16,13 @@ import Account from "../Account";
 import MakeConversation from "../Modal/MakeConversation";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 const Chat = forwardRef(( {usersOn }, ref) => {
+  const makeConversationRef = useRef();
   const [showIconSearch, setShowIconSearch] = useState(true);
-  const [showMakeConversation, setShowMakeConversation] = useState(false);
+  const [showMakeConversation, setShowMakeConversation] = useClickOutSide(makeConversationRef);
   const { conversations } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
- 
   useEffect(() => {
     dispatch(getConversations());
   }, []);
@@ -94,6 +95,7 @@ const Chat = forwardRef(( {usersOn }, ref) => {
       </div>
       {showMakeConversation && (
         <MakeConversation
+        ref={makeConversationRef}
         usersOn={usersOn}
           showMakeConversation={showMakeConversation}
           setShowMakeConversation={setShowMakeConversation}

@@ -15,6 +15,7 @@ import Avatar from "../../Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import {  getMessages } from "../../../redux/actions/messenge";
 import { io } from "socket.io-client";
+import { useClickOutSide } from "../../../hooks/useClickOutSide";
 
 let isFirstLoading = true;
 function HeaderRight({ isHideMessage }) {
@@ -25,18 +26,18 @@ function HeaderRight({ isHideMessage }) {
       isFirstLoading = false;
     }, 4 * 1000);
   }, []);
-
-  const [currentMess, setCurrentMess] = useState({});
-  const { currentUser } = useContext(UserContext);
-  const [showAccountSetting, setShowAccountSetting] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const [usersOn, setUsersOn] = useState([]);
   const accountRef = useRef();
   const notificationRef = useRef();
   const chatRef = useRef();
   const menuRef = useRef();
+  const [currentMess, setCurrentMess] = useState({});
+  const { currentUser } = useContext(UserContext);
+  const [showAccountSetting, setShowAccountSetting] = useClickOutSide(accountRef);
+  const [showNotification, setShowNotification] = useClickOutSide(notificationRef);
+  const [showChat, setShowChat] = useClickOutSide(chatRef);
+  const [showMenu, setShowMenu] = useClickOutSide(menuRef);
+  const [usersOn, setUsersOn] = useState([]);
+  
   const { messenges } = useSelector((state) => state.messenges);
   const dispatch = useDispatch();
   const socket = useRef();
@@ -48,73 +49,6 @@ function HeaderRight({ isHideMessage }) {
       setUsersOn(users);
     });
   }, [currentUser]);
-  useEffect(() => {
-    function handleClickOutsideAccount(e) {
-      const el = document.querySelector(".header__right__one.select");
-      if (el && el.title === "account" && el.contains(e.target)) {
-        setShowAccountSetting(true);
-      } else {
-        if (accountRef.current && !accountRef.current.contains(e.target)) {
-          setShowAccountSetting(false);
-        }
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutsideAccount);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideAccount);
-    };
-  }, [accountRef]);
-  useEffect(() => {
-    function handleClickOutsideAccount(e) {
-      const el = document.querySelector(".header__right__one.select");
-      if (el && el.title === "notifi" && el.contains(e.target)) {
-        setShowNotification(true);
-      } else {
-        if (
-          notificationRef.current &&
-          !notificationRef.current.contains(e.target)
-        ) {
-          setShowNotification(false);
-        }
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutsideAccount);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideAccount);
-    };
-  }, [notificationRef]);
-  useEffect(() => {
-    function handleClickOutsideAccount(e) {
-      const el = document.querySelector(".header__right__one.select");
-      if (el && el.title === "chat" && el.contains(e.target)) {
-        setShowChat(true);
-      } else {
-        if (chatRef.current && !chatRef.current.contains(e.target)) {
-          setShowChat(false);
-        }
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutsideAccount);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideAccount);
-    };
-  }, [chatRef]);
-  useEffect(() => {
-    function handleClickOutsideAccount(e) {
-      const el = document.querySelector(".header__right__one.select");
-      if (el && el.title === "menu" && el.contains(e.target)) {
-        setShowMenu(true);
-      } else {
-        if (menuRef.current && !menuRef.current.contains(e.target)) {
-          setShowMenu(false);
-        }
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutsideAccount);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideAccount);
-    };
-  }, [menuRef]);
   useEffect(() => {
     currentMess && dispatch(getMessages(currentMess.id));
   }, [currentMess]);

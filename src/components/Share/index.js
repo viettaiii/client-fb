@@ -13,46 +13,22 @@ import Spinner from "../Modal/Spinner";
 import { UserContext } from "../../context/authContext";
 import LoadingSkeleton from "../LoadingSkeleton";
 import Avatar from "../Avatar";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 let isFirstLoading = true;
 function Share() {
+  const createShareRef = useRef();
+  const errorRef = useRef();
   const [skeleton, setSkeleton] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const {currentUser} = useContext(UserContext);
-  const [showCreateShare, setShowCreateShare] = useState(false);
-  const createShareRef = useRef();
-  const [showError, setShowError] = useState(false);
-    const errorRef = useRef();
+  const [showCreateShare, setShowCreateShare] = useClickOutSide(createShareRef);
+  const [showError, setShowError] = useClickOutSide(errorRef);
     useEffect(() => {
       setTimeout(() => {
         setSkeleton(false)
         isFirstLoading = false;
       },(4 * 1000))
     },[])
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        createShareRef.current &&
-        !createShareRef.current.contains(event.target)
-      ) {
-        setShowCreateShare(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [createShareRef]);
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (errorRef.current && !errorRef.current.contains(event.target)) {
-        setShowError(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [errorRef]);
   return (
     <div className="share">
       <div className="share__top">

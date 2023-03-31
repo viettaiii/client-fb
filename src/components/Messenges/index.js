@@ -12,14 +12,14 @@ import { UserContext } from "../../context/authContext";
 import { getUserAxios } from "../../api/method";
 import CEmojiPicker from "../CEmojiPicker";
 import { addMessage, getMessages } from "../../redux/actions/messenge";
+import { useClickOutSide } from "../../hooks/useClickOutSide";
 function Messenges({ messenges,currentMess , usersOn }) {
- 
+  const emojiRef = useRef();
   const { currentUser  } = useContext(UserContext);
   const [user, setUser] = useState(null);
   const [mess, setMess] = useState("");
   const [arrivalMess, setArrivalMess] = useState(null);
-  const [showEmoji, setShowEmoji] = useState(false);
-  const emojiRef = useRef();
+  const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
   const socket = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -49,17 +49,6 @@ function Messenges({ messenges,currentMess , usersOn }) {
   const handleEmoijClick = (event, emoij) => {
     setMess((prev) => prev + event.emoji);
   };
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (emojiRef.current && !emojiRef.current.contains(event.target)) {
-        setShowEmoji(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [emojiRef]);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mess.trim()) {
