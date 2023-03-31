@@ -25,7 +25,7 @@ export function useSocket() {
   useEffect(() => {
     socket.current.emit("addUser", currentUser.id);
     socket.current.on("getUsers", (users) => {
-      setUsersOn(users);
+      setUsersOn(users.map(u => u.userId));
     });
   }, [currentUser]);
 
@@ -42,7 +42,7 @@ export function useSocket() {
   }, []);
   useEffect(() => {
     if (arrivalMess) {
-      if (usersOn.map((u) => u.userId).includes(arrivalMess.receiverId)) {
+      if (usersOn.includes(arrivalMess.receiverId)) {
         dispatch(addMessage(arrivalMess));
         setArrivalMess(null);
       }

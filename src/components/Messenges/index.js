@@ -24,7 +24,6 @@ function Messenges({ currentMess, messenges }) {
   const handleEmoijClick = (event, emoij) => {
     setMess((prev) => prev + event.emoji);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mess.trim()) {
@@ -41,21 +40,20 @@ function Messenges({ currentMess, messenges }) {
       }
     }
   };
-
   return (
     <div className="messenges">
       {user && (
         <div className="messenges__top">
           <div className="messenges__top__avatar">
             <Avatar image={user.profilePic} alt={user.firstName} />
-            {usersOn.map((user) => user.userId).includes(user.id) && <span />}
+            {usersOn.includes(user.id) && <span />}
           </div>
           <div className="messenges__top__info">
             <p className="messenges__top__info__name">
               {user.firstName + " " + user.lastName}
             </p>
             <span className="messenges__top__info__status">
-              {usersOn.map((user) => user.userId).includes(user.id) ? (
+              {usersOn.includes(user.id) ? (
                 <small className="messenges__top__info__status__on">
                   Online
                 </small>

@@ -148,7 +148,7 @@ function RightBar() {
                     >
                       <div className="right-bar__items__accounts__account__image">
                         <img src={"/uploads/" + user.profilePic} alt="" />
-                        {usersOn.map((u) => u.userId).includes(user.id) && (
+                        {usersOn.includes(user.id) && (
                           <span className="right-bar__items__accounts__account__image__circle" />
                         )}
                       </div>
@@ -186,7 +186,7 @@ function RightBar() {
                     <>
                       <div className="right-bar__items__accounts__account__image">
                         <img src={"/uploads/" + user.profilePic} alt="" />
-                        {usersOn.map((u) => u.userId).includes(user.id) && (
+                        {usersOn.includes(user.id) && (
                           <span className="right-bar__items__accounts__account__image__circle" />
                         )}
                       </div>

@@ -33,7 +33,7 @@ function Account({ conversation }) {
     <div className="chat__accounts__account">
       <div className="chat__accounts__account__avatar">
         <Avatar image={user.profilePic} alt={user.firstName} />
-      {usersOn.map(u => u.userId).includes(user.id) && <span className="chat__accounts__account__avatar__status"/>}  
+      {usersOn.includes(user.id) && <span className="chat__accounts__account__avatar__status"/>}  
       </div>
       <div className="chat__accounts__account__right">
         <span className="chat__accounts__account__right__name">

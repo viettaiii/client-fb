@@ -21,7 +21,7 @@ function Conversation({conversation ,active , usersOn}) {
              <div className={`conversations__bottom__conversation ${active ? "active" :""}`}>
        <span className="conversations__bottom__conversation__avatar">
        <Avatar image={user.profilePic ? user.profilePic : ""} alt={user.firstName ? user.firstName : ""} />
-       {usersOn.map(user => user.userId).includes(user.id) &&  <span className="conversations__bottom__conversation__avatar__online"/>}
+       {usersOn.includes(user.id) &&  <span className="conversations__bottom__conversation__avatar__online"/>}
        
        </span>
        <div className="conversations__bottom__conversation__info">
