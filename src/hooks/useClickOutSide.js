@@ -12,6 +12,9 @@ export function useClickOutSide(ref) {
           setShow(false);
       }
     }
+    const handleClick = () => {
+      setShow(!show);
+    };
     useEffect(() => {
        
           document.addEventListener("mousedown", handleClickOutside);
@@ -20,5 +23,5 @@ export function useClickOutSide(ref) {
           };
     
     },[ref])
-    return [ show ,setShow];
+    return [ show ,handleClick];
 }

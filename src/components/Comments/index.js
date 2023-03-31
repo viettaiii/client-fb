@@ -22,15 +22,13 @@ const Commnents = forwardRef(({showCommnent, comments, postId } , ref) => {
   const { currentUser } = useContext(UserContext);
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
-  const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
+  const [showEmoji, handleClick] = useClickOutSide(emojiRef);
   const [loading, setLoading] = useState(false);
   const handleEmoijClick = (event, emoij) => {
     setValue((prev) => prev + event.emoji);
   };
  
-  const handleClick = (e) => {
-    setShowEmoji(!showEmoji);
-  };
+ 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
