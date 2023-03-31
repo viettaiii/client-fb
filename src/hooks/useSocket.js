@@ -1,10 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { UserContext } from "../context/authContext";
 import { addMessage } from "../redux/actions/messenge";
 
 export function useSocket() {
+  const location = useLocation();
   const { currentUser } = useContext(UserContext);
   const [arrivalMess, setArrivalMess] = useState(null);
   const socket = useRef();
@@ -26,7 +28,7 @@ export function useSocket() {
     socket.current.on("getUsers", (users) => {
       setUsersOn(users.map((u) => u.userId));
     });
-  }, [currentUser]);
+  }, [currentUser , location]);
   useEffect(() => {
     socket.current.on("getMessage", (data) => {
       setArrivalMess({
@@ -41,7 +43,7 @@ export function useSocket() {
   useEffect(() => {
     if (arrivalMess) {
       if (usersOn.includes(arrivalMess.receiverId)) {
-        dispatch(addMessage(arrivalMess));
+             dispatch(addMessage(arrivalMess));;
         setArrivalMess(null);
       }
     }

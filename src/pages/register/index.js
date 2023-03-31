@@ -15,12 +15,9 @@ function Register() {
     handleChange,
     handleBlur,
     handleSubmit,
+    handleClick ,
   } = useRegister();
-  const navigate = useNavigate();
-
-  const handleClick = (e) => {
-    navigate("/login");
-  };
+  
   return (
     <div className="wrapper">
       <div className="wrapper__logo">

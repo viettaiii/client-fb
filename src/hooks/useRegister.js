@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import httpsRequest from "../api/axios";
 
-
-
 export function useRegister() {
-    const [inputs, setInputs] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-      });
-      const [showSuccess, setShowSuccess] = useState(false);
+  const [inputs, setInputs] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const navigate = useNavigate();
+  const handleClick = (e) => {
+    navigate("/login");
+  };
   const [errFirstName, setErrFirstName] = useState("");
   const [errLastName, setErrLastName] = useState("");
   const [errEmail, setErrEmail] = useState("");
@@ -66,24 +69,43 @@ export function useRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!inputs.email || inputs.password || !inputs.firstName || !inputs.lastName) {
-        if(!errSubmit) {
-          try {
-            const {data} = await httpsRequest.post('/api/auth/register', inputs)
-              if(data) {
-                setErrFirstName("")
-                setErrLastName("")
-                setErrEmail("")
-                setErrPassword("")
-                setShowSuccess(true);
-              }
-          }catch(e) {
-            const el = document.querySelector('.err-account');
-            el.textContent = e.response.data.message;
+    if (
+      !inputs.email ||
+      inputs.password ||
+      !inputs.firstName ||
+      !inputs.lastName
+    ) {
+      if (!errSubmit) {
+        try {
+          const { data } = await httpsRequest.post(
+            "/api/auth/register",
+            inputs
+          );
+          if (data) {
+            setErrFirstName("");
+            setErrLastName("");
+            setErrEmail("");
+            setErrPassword("");
+            setShowSuccess(true);
           }
+        } catch (e) {
+          const el = document.querySelector(".err-account");
+          el.textContent = e.response.data.message;
         }
+      }
     }
   };
 
-  return {showSuccess ,errFirstName ,  errLastName ,  errEmail , errPassword , inputs , handleChange , handleBlur ,  handleSubmit};
+  return {
+    showSuccess,
+    errFirstName,
+    errLastName,
+    errEmail,
+    errPassword,
+    inputs,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    handleClick,
+  };
 }
