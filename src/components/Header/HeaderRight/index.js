@@ -5,45 +5,45 @@ import { TiThMenu } from "react-icons/ti";
 import TextHover from "../TextHover";
 import ComNotification from "../../Notification";
 import AccountFuture from "../AccountFuture";
-import {  useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./header-right.scss";
 import Chat from "../../Chat";
 import Menu from "../../Menu";
 import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
-import { useDispatch} from "react-redux";
-import {  getMessages } from "../../../redux/actions/messenge";
+import { useDispatch } from "react-redux";
+import { getMessages } from "../../../redux/actions/messenge";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
-import { useSocket } from "../../../hooks/useSocket";
+import { SocketContext } from "../../../context/socketContext";
 
 function HeaderRight({ isHideMessage }) {
   const skeleton = useFirstGoToPage();
-  const [usersOn] = useSocket();
+  const { usersOn } = useContext(SocketContext);
   const accountRef = useRef();
   const notificationRef = useRef();
   const chatRef = useRef();
   const menuRef = useRef();
   const [currentMess, setCurrentMess] = useState({});
   const { currentUser } = useContext(UserContext);
-  const [showAccountSetting, setShowAccountSetting] = useClickOutSide(accountRef);
-  const [showNotification, setShowNotification] = useClickOutSide(notificationRef);
+  const [showAccountSetting, setShowAccountSetting] =
+    useClickOutSide(accountRef);
+  const [showNotification, setShowNotification] =
+    useClickOutSide(notificationRef);
   const [showChat, setShowChat] = useClickOutSide(chatRef);
   const [showMenu, setShowMenu] = useClickOutSide(menuRef);
   const dispatch = useDispatch();
- 
   useEffect(() => {
     currentMess && dispatch(getMessages(currentMess.id));
   }, [currentMess]);
-
   return (
     <div className="header__right">
       <div
         className={`header__right__one ${showMenu ? "select" : ""} mobile-none`}
         title="menu"
       >
-        {skeleton  ? (
+        {skeleton ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -57,7 +57,7 @@ function HeaderRight({ isHideMessage }) {
         )}
       </div>
       <div className="header__right__one mobile-display screen-large-992-none">
-        {skeleton  ? (
+        {skeleton ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -70,7 +70,7 @@ function HeaderRight({ isHideMessage }) {
           className={`header__right__one ${showChat ? "select" : ""}`}
           title="chat"
         >
-          {skeleton  ? (
+          {skeleton ? (
             <LoadingSkeleton circle="true" />
           ) : (
             <>
@@ -80,7 +80,12 @@ function HeaderRight({ isHideMessage }) {
               />
               <TextHover text={"Messenger"} />
               {showChat && (
-                <Chat usersOn={usersOn} setCurrentMess={setCurrentMess} setShowChat={setShowChat} ref={chatRef} />
+                <Chat
+                  usersOn={usersOn}
+                  setCurrentMess={setCurrentMess}
+                  setShowChat={setShowChat}
+                  ref={chatRef}
+                />
               )}
             </>
           )}
@@ -91,7 +96,7 @@ function HeaderRight({ isHideMessage }) {
         className={`header__right__one ${showNotification ? "select" : ""}`}
         title="notifi"
       >
-        {skeleton  ? (
+        {skeleton ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -109,7 +114,7 @@ function HeaderRight({ isHideMessage }) {
         className={`header__right__one ${showAccountSetting ? "select" : ""}`}
         title="account"
       >
-        {skeleton  ? (
+        {skeleton ? (
           <LoadingSkeleton circle="true" />
         ) : (
           <>
@@ -138,10 +143,8 @@ function HeaderRight({ isHideMessage }) {
 }
 export default HeaderRight;
 
-
-
 // const ModalMess = ({ messenges, currentMess ,setCurrentMess }) => {
- 
+
 //   const [user, setUser] = useState(null);
 //   const { currentUser } = useContext(UserContext);
 //   const scrollRef = useRef();
@@ -161,7 +164,7 @@ export default HeaderRight;
 //     };
 //     getUser();
 //   }, [currentMess, messenges]);
-  
+
 //   useEffect(() => {
 //     socket.current = io("ws://localhost:9111");
 //   }, []);

@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
 
 export function useClickOutSide(ref) {
-    const [show , setShow] = useState(false);
-    function handleClickOutside(event) {
-      if (
-          ref.current &&
-        !ref.current.contains(event.target)
-      ) {
-          setShow(false);
+  const [show, setShow] = useState(false);
+  const handleClick = useCallback(() => {
+    setShow(!show);
+  }, [show]);
+  const handleClickOutside = useCallback(
+    (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShow(false);
       }
-    }
-    const handleClick = () => {
-      setShow(!show);
+    },
+    [ref]
+  );
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-    useEffect(() => {
-       
-          document.addEventListener("mousedown", handleClickOutside);
-          return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-          };
-    
-    },[ref])
-    return [ show  , setShow,handleClick];
+  }, [ref]);
+  return [show, setShow, handleClick];
 }

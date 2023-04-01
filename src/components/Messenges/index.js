@@ -11,15 +11,15 @@ import { UserContext } from "../../context/authContext";
 import CEmojiPicker from "../CEmojiPicker";
 import { addMessage } from "../../redux/actions/messenge";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
-import { useSocket } from "../../hooks/useSocket";
 import { useUserFriend } from "../../hooks/useUserFriend";
-function Messenges({ currentMess, messenges }) {
+import { SocketContext } from "../../context/socketContext";
+function Messenges({ currentMess, messenges  }) {
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
   const user = useUserFriend(currentMess || null);
   const [mess, setMess] = useState("");
   const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
-  const [usersOn, handleSendMessage] = useSocket();
+  const {usersOn , handleSendMessage}= useContext(SocketContext);
   const dispatch = useDispatch();
   const handleEmoijClick = (event, emoij) => {
     setMess((prev) => prev + event.emoji);
@@ -35,7 +35,7 @@ function Messenges({ currentMess, messenges }) {
           receiverId: user.id,
         };
         handleSendMessage(values);
-        dispatch(addMessage(values));
+        dispatch(addMessage(values))
         setMess("");
       }
     }
@@ -69,7 +69,7 @@ function Messenges({ currentMess, messenges }) {
 
       <div className="messenges__bottom">
         <div className="messenges__bottom__contents">
-          {messenges.map((mess, i) => (
+          {!messenges ? "Open chat":messenges.map((mess, i) => (
             <Messenge
               own={mess.senderId === currentUser.id}
               mess={mess}

@@ -1,4 +1,4 @@
-import {  useEffect,  useState } from "react";
+import {  useContext, useEffect,  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // My imports
@@ -8,13 +8,13 @@ import Header from "../Header";
 import Messenges from "../Messenges";
 import { getMessages } from "../../redux/actions/messenge";
 import "./messenger.scss";
-import { useSocket } from "../../hooks/useSocket";
+import { SocketContext } from "../../context/socketContext";
 function Messenger() {
+  const {usersOn}= useContext(SocketContext);
   const dispatch = useDispatch();
   const [currentMess, setCurrentMess] = useState();
   const { conversations } = useSelector((state) => state.conversations);
   const { messenges } = useSelector((state) => state.messenges);
-  const [ usersOn ] = useSocket();
   useEffect(() => {
     dispatch(getConversations());
     conversations.length > 0 &&

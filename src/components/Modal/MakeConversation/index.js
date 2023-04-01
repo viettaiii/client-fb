@@ -1,11 +1,13 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useContext, useEffect, useRef } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
+import { SocketContext } from "../../../context/socketContext";
 import { getUsers } from "../../../redux/actions/user";
 import Avatar from "../../Avatar";
 import "./make-conversation.scss";
 
-const MakeConversation = forwardRef(({ usersOn  , setShowMakeConversation}, ref) => {
+const MakeConversation = forwardRef(({ setShowMakeConversation}, ref) => {
+  const {usersOn}  = useContext(SocketContext);
   const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {

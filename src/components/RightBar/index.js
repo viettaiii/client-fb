@@ -1,8 +1,7 @@
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { AiTwotoneVideoCamera, AiOutlineSearch } from "react-icons/ai";
-import { io } from "socket.io-client";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect} from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 // My imports
@@ -23,14 +22,13 @@ import {
 import Avatar from "../Avatar";
 import "./right-bar.scss";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
-import { useSocket } from "../../hooks/useSocket";
-
+  import { SocketContext } from "../../context/socketContext";
 function RightBar() {
   const skeleton = useFirstGoToPage();
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userOthers } = useSelector((state) => state.userOthers);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
-  const [usersOn] = useSocket();
+  const {usersOn}= useContext(SocketContext);
   const dispatch = useDispatch();
   const { currentUser } = useContext(UserContext);
   useEffect(() => {

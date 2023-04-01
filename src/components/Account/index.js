@@ -1,9 +1,10 @@
-import { useSocket } from "../../hooks/useSocket";
+import { useContext} from "react";
+import { SocketContext } from "../../context/socketContext";
 import { useUserFriend } from "../../hooks/useUserFriend";
 import Avatar from "../Avatar";
 
 function Account({ conversation }) {
-  const [usersOn] = useSocket();
+  const {usersOn}  = useContext(SocketContext);
   const user = useUserFriend(conversation);
   return (
     <div className="chat__accounts__account">

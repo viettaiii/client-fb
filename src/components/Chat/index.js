@@ -14,11 +14,11 @@ import MakeConversation from "../Modal/MakeConversation";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
-const Chat = forwardRef(({ usersOn }, ref) => {
+const Chat = forwardRef(({  }, ref) => {
   const makeConversationRef = useRef();
   const [showIconSearch, setShowIconSearch] = useState(true);
   const [showMakeConversation, setShowMakeConversation] =
-    useClickOutSide(makeConversationRef);
+  useClickOutSide(makeConversationRef);
   const { conversations } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -94,7 +94,6 @@ const Chat = forwardRef(({ usersOn }, ref) => {
       {showMakeConversation && (
         <MakeConversation
           ref={makeConversationRef}
-          usersOn={usersOn}
           showMakeConversation={showMakeConversation}
           setShowMakeConversation={setShowMakeConversation}
         />
