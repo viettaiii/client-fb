@@ -6,6 +6,7 @@ import { addMessage } from "../redux/actions/messenge";
 
 export function useSocket() {
   const { currentUser } = useContext(UserContext);
+  
   const [arrivalMess, setArrivalMess] = useState(null);
   const socket = useRef();
   const [usersOn, setUsersOn] = useState([]);
@@ -22,6 +23,7 @@ export function useSocket() {
     socket.current = io("ws://localhost:9111");
   }, []);
   useEffect(() => {
+    if(window.location.pathname === '/login' || window.location.pathname === '/register') return;
     socket.current.emit("addUser", currentUser.id);
     socket.current.on("getUsers", (users) => {
       setUsersOn(users.map((u) => u.userId));
@@ -40,7 +42,8 @@ export function useSocket() {
   }, []);
   useEffect(() => {
     if (arrivalMess) {
-      if (usersOn.includes(arrivalMess.receiverId)) {
+      if (usersOn.includes( arrivalMess.receiverId)) {
+      
         dispatch(addMessage(arrivalMess));
         setArrivalMess(null);
       }

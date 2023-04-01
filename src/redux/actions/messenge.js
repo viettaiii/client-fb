@@ -23,6 +23,6 @@ export const addMessage =  (inputs) => async (dispatch) => {
         })
     }
     catch(e) {
-       console.log("add new chat  failed");
+       console.log("add new chat failed");
     }
 }
