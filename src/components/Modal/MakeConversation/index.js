@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect, useRef } from "react";
+import { forwardRef, useContext, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { SocketContext } from "../../../context/socketContext";
@@ -13,13 +13,11 @@ const MakeConversation = forwardRef(({ setShowMakeConversation}, ref) => {
   useEffect(() => {
     dispatch(getUsers());
   }, []);
-  const MakeConversationRef = useRef();
-
   return (
     <div className="modal-make-conversation">
       <div className="make-conversation" ref={ref}>
         <h3>
-          Danh sách người dùng trên facebook.{" "}
+          Hãy chọn người bạn mà muốn nhắn tin.
           <span
             className="make-conversation__close"
             onClick={() => setShowMakeConversation(false)}

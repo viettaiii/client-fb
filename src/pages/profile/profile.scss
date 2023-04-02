@@ -337,6 +337,10 @@
               @include desktop {
                 margin-top: 60px;
               }
+              @include tablet {
+                font-size: 1.3rem;
+                padding: 0px 8px;
+              }
               &::after {
                 position: absolute;
                 content: "";
@@ -378,11 +382,21 @@
             display: flex;
             gap: 4px;
             flex:1;
+            padding: 0px 10px;
             span {
               font-weight: 400;
-              font-size: 1.6rem;
+              font-size: 1.3rem;
               padding: 15px 10px;
               border-radius: 5px;
+
+              @include tablet {
+                padding: 10px 4px;
+              }
+
+              @include mobile {
+                padding: 5px 1px;
+                font-size: 1.05rem;
+              }
               color:themed(textColor);
               cursor: pointer;
               transition: background-color 0.1s linear;
@@ -463,13 +477,16 @@
       &__content {
         height: 100%;
         margin: 20px 200px;
-       
         display: flex;
         gap:10px;
-        
+        @include desktop-xl {
+          margin: 20px;
+        }
         &__left {
-          width: 490px;
-        
+          flex:1;
+          @include tablet {
+              display: none;
+          }
           gap:10px;
           display: flex;
           flex-direction: column;
@@ -611,12 +628,16 @@
         }
 
         &__right {
-          flex:1;
+          width: 750px;
           border-radius: 5px;
           color:themed(textColor);
           background-color: themed(bgSoft);
           @include box-shadow;
           padding: 10px ;
+
+          @include tablet {
+            flex:1;
+          }
         }
       }
     }

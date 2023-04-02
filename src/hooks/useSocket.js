@@ -45,7 +45,6 @@ export function useSocket() {
   useEffect(() => {
     if (arrivalMess) {
       if (usersOn.includes( arrivalMess.receiverId)) {
-      
         dispatch(addMessage(arrivalMess));
         setArrivalMess(null);
       }

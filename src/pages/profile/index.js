@@ -1,6 +1,6 @@
 import "./profile.scss";
 import { Link, useParams } from "react-router-dom";
-import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { CiImageOn, CiLocationOn, CiTrash, CiWifiOn } from "react-icons/ci";
 import { IoIosMore, IoMdAdd } from "react-icons/io";
@@ -11,7 +11,6 @@ import { MdModeEditOutline } from "react-icons/md";
 import { UserContext } from "../../context/authContext";
 import { routesPublic } from "../../config/routes";
 import Header from "../../components/Header";
-import httpsRequest from "../../api/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile, updateUser } from "../../redux/actions/user";
 import { getUserFriends } from "../../redux/actions/friend";
@@ -34,6 +33,8 @@ import { getUserInfo } from "../../redux/actions/info";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 import { useFileImage } from "../../hooks/useFileImage";
+import Share from "../../components/Share";
+import Posts from '../../components/Posts'
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
   const skeleton = useFirstGoToPage();
@@ -49,6 +50,8 @@ function Profile() {
   const todosFavoriteRef = useRef();
   const [modalTodoFavorite, setModalTodoFavorite] =
     useClickOutSide(todosFavoriteRef);
+
+
   const dispatch = useDispatch();
   const handleFile = useFileImage();
   //-----
@@ -56,11 +59,8 @@ function Profile() {
   const [valueDescrip, setValueDescrip] = useState("");
   const [userFavories, setUserFavories] = useState(favories);
   const { stories } = useSelector((state) => state.stories);
-
   const [showSpinnerEllipsis, setShowSpinnerEllipsis] = useState(true);
-
   const [showModalRemove, setShowModalRemove] = useState(false);
-
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
   const { userInfo } = useSelector((state) => state.userInfo);
   const [coverPic, setCoverPic] = useState(null);
@@ -68,16 +68,16 @@ function Profile() {
   const { currentUser, update } = useContext(UserContext);
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userProfile } = useSelector((state) => state.userProfile);
+
   useEffect(() => {
     dispatch(getStories());
     dispatch(getUserInfo(userId));
-  }, [dispatch]);
-
-  useEffect(() => {
+  }, [dispatch ,userId]);
+  useLayoutEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserFriends(userId));
     dispatch(getFriendsRequest());
-  }, [userId]);
+  }, [userId , dispatch]);
   const handleCoverPic = (e) => {
     setShowSpinner(true);
     setTimeout(() => {
@@ -85,7 +85,7 @@ function Profile() {
       setShowSpinner(false);
     }, 3 * 1000);
   };
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     const newCoverPic = await handleFile(coverPic);
     const { coverPic: coverPicOld, ...others } = userProfile;
     setShowSpinner(true);
@@ -96,8 +96,8 @@ function Profile() {
       setShowSpinner(false);
       setShowEditCoverPic(false);
     }, 3 * 1000);
-  };
-  const handleRemoveCoverPic = () => {
+  });
+  const handleRemoveCoverPic = useCallback(() => {
     const { coverPic: coverPicOld, ...others } = userProfile;
     setShowModalRemove(false);
     setShowSpinner(true);
@@ -107,7 +107,7 @@ function Profile() {
       setShowSpinner(false);
       setShowEditCoverPic(false);
     }, 3 * 1000);
-  };
+  });
 
   const handleAddFriendRequest = async () => {
     await dispatch(addFriendRequest(userId));
@@ -456,7 +456,10 @@ function Profile() {
               </div>
             </nav>
           </div>
-          <div className="profile__top__content__right"></div>
+          <div className="profile__top__content__right">
+                  <Share/>
+                  <Posts ownId={parseInt(userId)}/>
+          </div>
         </div>
         {showImageUser && (
           <ImageUser

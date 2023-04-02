@@ -5,10 +5,9 @@ import './posts.scss';
 import { useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { getPosts } from '../../redux/actions/post';
-function Posts() {
-    const postReducer = useSelector((state) => state.posts);
+function Posts({ownId}) {
+    const {isLoading ,isError, posts } = useSelector((state) => state.posts);
     const dispatch = useDispatch();
-    const {isLoading ,isError, posts } = postReducer;
     useEffect(() => {
             dispatch(getPosts());
     },[dispatch])
@@ -16,9 +15,15 @@ function Posts() {
         <>
         {isLoading ? "Loading..." : 
         <div className="posts">
-              {posts.map((post,index )=> (
-                  <Post  post={post} key={index} />
-              ))}  
+              {ownId ? 
+              posts.filter(post => post.userId === ownId).map((post,index) => (
+                <Post  post={post} key={index} /> 
+              ))
+              
+              : posts.map((post,index )=> {
+               return  <Post  post={post} key={index} /> 
+                  
+              })}  
         </div>
         }
           
