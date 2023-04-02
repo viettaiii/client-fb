@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useRef, useState } from "react";
 import { BiSend } from "react-icons/bi";
 
 import { MdInsertEmoticon } from "react-icons/md";
