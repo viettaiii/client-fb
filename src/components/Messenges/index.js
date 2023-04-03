@@ -12,15 +12,13 @@ import CEmojiPicker from "../CEmojiPicker";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useUserFriend } from "../../hooks/useUserFriend";
 import { SocketContext } from "../../context/socketContext";
-function Messenges({ currentMess, messenges , sending}) {
-  const [messs , setMesss] = useState(messenges);
+function Messenges({ currentMess, messenges }) {
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
   const user = useUserFriend(currentMess || null);
   const [mess, setMess] = useState("");
   const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
   const { usersOn, sendMessage } = useContext(SocketContext);
-  const dispatch = useDispatch();
   const handleEmoijClick = (event, emoij) => {
     setMess((prev) => prev + event.emoji);
   };
@@ -36,7 +34,6 @@ function Messenges({ currentMess, messenges , sending}) {
         };
         setMess("");
         sendMessage(values);
-
       }
     }
   };
@@ -69,15 +66,27 @@ function Messenges({ currentMess, messenges , sending}) {
 
       <div className="messenges__bottom">
         <div className="messenges__bottom__contents">
-          {!messenges
-            ? "Open chat"
-            : messenges.map((mess, i) => (
-                <Messenge
-                  own={mess.senderId === currentUser.id}
-                  mess={mess}
-                  key={i}
-                />
-              ))}
+          {messenges.length <= 0 ? (
+            <div
+              style={{
+                fontSize: "2rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              Hãy cùng trò chuyện với nhau nào.
+            </div>
+          ) : (
+            messenges.map((mess, i) => (
+              <Messenge
+                own={mess.senderId === currentUser.id}
+                mess={mess}
+                key={i}
+              />
+            ))
+          )}
         </div>
         <div className="messenges__bottom__box-mail">
           <div className="messenges__bottom__box-mail__left">
