@@ -5,10 +5,10 @@ import { useSocket } from "../hooks/useSocket";
 export const SocketContext = createContext();
 
 export const ProviderSocketContext = ({children}) => {
-    const [usersOn , handleSendMessage ] = useSocket();
+    const {usersOn , sendMessage } = useSocket();
     
     return (
-        <SocketContext.Provider value={{usersOn , handleSendMessage}} >
+        <SocketContext.Provider value={{usersOn , sendMessage}} >
             {children}
         </SocketContext.Provider>
     )

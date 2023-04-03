@@ -13,7 +13,7 @@ export function useSocket() {
   const socket = useRef();
   const [usersOn, setUsersOn] = useState([]);
   const dispatch = useDispatch();
-  function handleSendMessage(data) {
+  function sendMessage  (data) {
     socket.current.emit("sendMessage", {
       conversationId: data.conversationId,
       senderId: data.senderId,
@@ -44,12 +44,11 @@ export function useSocket() {
   }, []);
   useEffect(() => {
     if (arrivalMess) {
-      if (usersOn.includes( arrivalMess.receiverId)) {
+      
         dispatch(addMessage(arrivalMess));
         setArrivalMess(null);
-      }
     }
   }, [arrivalMess]);
 
-  return [usersOn, handleSendMessage];
+  return {usersOn, sendMessage };
 }
