@@ -39,7 +39,9 @@ function Messenger() {
           messenges={messenges}
           sending={sending}
         />
-        <div className="online"></div>
+        <div className="online">
+            
+        </div>
       </div>
     </>
   );

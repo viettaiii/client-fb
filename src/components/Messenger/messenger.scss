@@ -3,7 +3,9 @@
 .messenger {
   @include themify($themes) {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - calc($height-header));
+    top: calc($height-header);
+    position: sticky;
     .conversations {
       flex: 3;
     }
@@ -14,7 +16,7 @@
       flex: 3;
 
       @include desktop-xl {
-          display: none;
+        display: none;
       }
     }
   }
