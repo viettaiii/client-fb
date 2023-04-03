@@ -27,6 +27,8 @@ const crashReporter = store => next => action => {
       throw err
     }
   }
+
+  
 const reducer = combineReducers({
   messenges:chatsReducer,
   users:usersReducer,

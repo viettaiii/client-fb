@@ -49,7 +49,7 @@ const MakeConversation = forwardRef(({ setShowMakeConversation }, ref) => {
         <h5>Đang hoạt động</h5>
         <div className="make-conversation__list-users">
           {users
-            .filter((user) => usersOn.includes(user.id))
+            .filter((user) => usersOn.includes(user.id) && user.id !== parseInt(currentUser.id))
             .map((user, i) => (
               <div
                 key={i}

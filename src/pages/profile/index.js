@@ -22,7 +22,6 @@ import Button from "../../components/Button";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import UpdateAvatar from "../../components/Modal/UpdateAvatar";
 import {
-  addFriendRequest,
   getFriendsRequest,
   deleteFriendRequest,
 } from "../../redux/actions/friendRequest";
@@ -35,9 +34,11 @@ import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 import { useFileImage } from "../../hooks/useFileImage";
 import Share from "../../components/Share";
 import Posts from '../../components/Posts'
+import { SocketContext } from "../../context/socketContext";
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
   const skeleton = useFirstGoToPage();
+  const {sendSuggestFriend} = useContext(SocketContext);
   const { userId } = useParams();
   const editCoverPicRef = useRef();
   const [showEditCoverPic, setShowEditCoverPic] =
@@ -110,7 +111,8 @@ function Profile() {
   });
 
   const handleAddFriendRequest = async () => {
-    await dispatch(addFriendRequest(userId));
+    sendSuggestFriend({senderUserId : currentUser.id , receiverUserId : userId})
+   
   };
   const handleDeleteRequest = async () => {
     const values = {
