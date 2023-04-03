@@ -16,3 +16,17 @@ export const getConversations =  () => async (dispatch) => {
     }
 }
 
+export const addConversation =  (userId) => async (dispatch) => {
+    try {
+   
+        const {data} = await httpsRequest.post('/api/conversations?userId='+userId);
+        dispatch({
+            type: actionTypes.ADD_CONVERSATION,
+            payload:data 
+        })
+    }
+    catch(e) {
+       console.log("add conversations  failed");
+    }
+}
+

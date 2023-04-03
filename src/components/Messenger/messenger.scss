@@ -5,6 +5,7 @@
     display: flex;
     height: calc(100vh - calc($height-header));
     top: calc($height-header);
+    background:themed(bg);
     position: sticky;
     .conversations {
       flex: 3;

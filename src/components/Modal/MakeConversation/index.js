@@ -1,18 +1,39 @@
 import { forwardRef, useContext, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  addConversation,
+  getConversations,
+} from "../../../redux/actions/conversation";
+import { UserContext } from "../../../context/authContext";
 import { SocketContext } from "../../../context/socketContext";
 import { getUsers } from "../../../redux/actions/user";
 import Avatar from "../../Avatar";
 import "./make-conversation.scss";
-
-const MakeConversation = forwardRef(({ setShowMakeConversation}, ref) => {
-  const {usersOn}  = useContext(SocketContext);
+import {  useNavigate } from "react-router-dom";
+import { routesPublic } from "../../../config/routes";
+const MakeConversation = forwardRef(({ setShowMakeConversation }, ref) => {
+  const { usersOn } = useContext(SocketContext);
+  const navigate = useNavigate();
+  const { currentUser } = useContext(UserContext);
   const { users } = useSelector((state) => state.users);
+  const { conversations } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getConversations(currentUser.id));
   }, []);
+  const handleAddConversation = (userId) => {
+    const isCheck = conversations.some(
+      (c) => c.userId_1 === parseInt(userId) || c.userId_2 === parseInt(userId)
+    );
+    if (isCheck) {
+      alert("Người dùng đã có cuộc hội thuộc với bạn rồi");
+      return;
+    }
+    dispatch(addConversation(userId));
+    navigate(routesPublic.messenger);
+  };
   return (
     <div className="modal-make-conversation">
       <div className="make-conversation" ref={ref}>
@@ -30,7 +51,11 @@ const MakeConversation = forwardRef(({ setShowMakeConversation}, ref) => {
           {users
             .filter((user) => usersOn.includes(user.id))
             .map((user, i) => (
-              <div key={i} className="make-conversation__list-users__user">
+              <div
+                key={i}
+                className="make-conversation__list-users__user"
+                onClick={() => handleAddConversation(user.id)}
+              >
                 <span className="make-conversation__list-users__user__avatar">
                   <Avatar image={user.profilePic} alt={user.firstName} />
                   {usersOn.includes(user.id) ? (
@@ -55,7 +80,11 @@ const MakeConversation = forwardRef(({ setShowMakeConversation}, ref) => {
           {users
             .filter((user) => !usersOn.includes(user.id))
             .map((user, i) => (
-              <div key={i} className="make-conversation__list-users__user">
+              <div
+                key={i}
+                className="make-conversation__list-users__user"
+                onClick={() => handleAddConversation(user.id)}
+              >
                 <span className="make-conversation__list-users__user__avatar">
                   <Avatar image={user.profilePic} alt={user.firstName} />
                   {usersOn.includes(user.id) ? (

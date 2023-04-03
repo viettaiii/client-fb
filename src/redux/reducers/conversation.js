@@ -17,7 +17,11 @@ export const conversationsReducer= (state = initConversations , action) => {
                 isLoading: false,
                 conversations : action.payload,
             }
-       
+        case actionTypes.ADD_CONVERSATION : 
+        return {
+            ...state,
+            conversations: [...state.conversations , action.payload]
+        }
         default :
         return state;
     }
