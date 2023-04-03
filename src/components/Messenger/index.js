@@ -14,7 +14,7 @@ function Messenger() {
   const dispatch = useDispatch();
   const [currentMess, setCurrentMess] = useState();
   const { conversations } = useSelector((state) => state.conversations);
-  const { messenges } = useSelector((state) => state.messenges);
+  const { messenges , sending } = useSelector((state) => state.messenges);
   useEffect(() => {
     dispatch(getConversations());
     conversations.length > 0 &&
@@ -37,6 +37,7 @@ function Messenger() {
         <Messenges
           currentMess={currentMess}
           messenges={messenges}
+          sending={sending}
         />
         <div className="online"></div>
       </div>

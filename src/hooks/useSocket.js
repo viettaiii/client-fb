@@ -20,6 +20,7 @@ export function useSocket() {
       text: data.text,
       receiverId: data.receiverId,
     });
+    dispatch(addMessage(data));
   }
   useEffect(() => {
     socket.current = io("ws://localhost:9111");

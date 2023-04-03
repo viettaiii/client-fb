@@ -9,15 +9,11 @@ import "./messenges.scss";
 import Messenge from "./Messenge";
 import { UserContext } from "../../context/authContext";
 import CEmojiPicker from "../CEmojiPicker";
-import {
-  addMessage,
-  getMessages,
-  sendingMessage,
-} from "../../redux/actions/messenge";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useUserFriend } from "../../hooks/useUserFriend";
 import { SocketContext } from "../../context/socketContext";
-function Messenges({ currentMess, messenges }) {
+function Messenges({ currentMess, messenges , sending}) {
+  const [messs , setMesss] = useState(messenges);
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
   const user = useUserFriend(currentMess || null);
@@ -28,7 +24,7 @@ function Messenges({ currentMess, messenges }) {
   const handleEmoijClick = (event, emoij) => {
     setMess((prev) => prev + event.emoji);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (mess.trim()) {
       if (currentMess) {
@@ -38,8 +34,9 @@ function Messenges({ currentMess, messenges }) {
           text: mess,
           receiverId: user.id,
         };
-        dispatch(sendMessage(values));
         setMess("");
+        sendMessage(values);
+
       }
     }
   };
