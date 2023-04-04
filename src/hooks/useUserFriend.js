@@ -7,15 +7,17 @@ export function useUserFriend(options) {
   const [user, setUser] = useState({});
   useEffect(() => {
     if (options) {
-      const { id, ...others } = options;
-      const friendId = Object.values(others).find(
-        (userId) => userId !== currentUser.id
-      );
-      const getUser = async () => {
+      const getUser = async (friendId) => {
         const data = await getUserAxios(friendId);
         setUser(data);
       };
-      getUser();
+      if (typeof options === "object") {
+        const { id, ...others } = options;
+        const friendId = Object.values(others).find(
+          (userId) => userId !== currentUser.id
+        );
+        getUser(friendId);
+      }
     }
   }, [options]);
   return user;

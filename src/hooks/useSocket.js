@@ -7,7 +7,6 @@ import { addMessage } from "../redux/actions/messenge";
 
 export function useSocket() {
   const { currentUser } = useContext(UserContext);
-  // await dispatch(addFriendRequest(userId));
   const [arrivalMess, setArrivalMess] = useState(null);
   const [arrivalSuggestFriend , setArrivalSuggestFriend] = useState(null);
   const socket = useRef();
@@ -68,7 +67,8 @@ export function useSocket() {
   },[])
   useEffect(() => {
     arrivalSuggestFriend && dispatch(getFriendsRequest());
+    setArrivalSuggestFriend(null);
   },[arrivalSuggestFriend])
 
-  return { usersOn, sendMessage, sendSuggestFriend };
+  return { usersOn, sendMessage, sendSuggestFriend  ,arrivalSuggestFriend};
 }
