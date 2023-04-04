@@ -19,6 +19,7 @@ export const chatsReducer= (state = initMessenges , action) => {
             }
         case actionTypes.ADD_MESSENGE :
             return {
+                ...state,
                 messenges : [...state.messenges,action.payload]
             }
         default :

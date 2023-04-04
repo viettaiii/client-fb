@@ -3,7 +3,6 @@ import { GrAdd } from "react-icons/gr";
 import { IoMdNotifications } from "react-icons/io";
 import { TiThMenu } from "react-icons/ti";
 import TextHover from "../TextHover";
-import ComNotification from "../../Notification";
 import AccountFuture from "../AccountFuture";
 import { useContext, useEffect, useRef, useState } from "react";
 import "./header-right.scss";
@@ -12,11 +11,13 @@ import Menu from "../../Menu";
 import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getMessages } from "../../../redux/actions/messenge";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 import { SocketContext } from "../../../context/socketContext";
+import Notifications from "../../Notifications";
+import { getNotifications } from "../../../redux/actions/notification";
 
 function HeaderRight({ isHideMessage }) {
   const skeleton = useFirstGoToPage();
@@ -33,10 +34,15 @@ function HeaderRight({ isHideMessage }) {
     useClickOutSide(notificationRef);
   const [showChat, setShowChat] = useClickOutSide(chatRef);
   const [showMenu, setShowMenu] = useClickOutSide(menuRef);
+  
   const dispatch = useDispatch();
+  const { notifications } = useSelector((state) => state.notifications);
   useEffect(() => {
     currentMess && dispatch(getMessages(currentMess.id));
   }, [currentMess]);
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, [dispatch]);
   return (
     <div className="header__right">
       <div
@@ -105,8 +111,8 @@ function HeaderRight({ isHideMessage }) {
               className="header__right__one__icon"
               onClick={() => setShowNotification(!showNotification)}
             />
-            <span className="header__right__one__notifi">5</span>
-            {showNotification && <ComNotification ref={notificationRef} />}
+            <span className="header__right__one__notifi">{notifications.length}</span>
+            {showNotification && <Notifications notifications={notifications} ref={notificationRef} />}
           </>
         )}
       </div>

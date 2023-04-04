@@ -1,48 +1,38 @@
-
-import {FiMoreHorizontal} from 'react-icons/fi';
-import {BsFillCameraReelsFill} from 'react-icons/bs';
-import {FaUserAlt} from 'react-icons/fa';
-import { forwardRef } from 'react';
-
-
+import { FiMoreHorizontal } from "react-icons/fi";
+import { forwardRef } from "react";
 
 ///My imports
-import {newNotification , invitationNotification , afterNotification} from '../../assets/data-notification';
-import './notification.scss';
-import Button from '../Button';
-const ComNotification = forwardRef((props, ref) => 
-{
-    return (  
-        <div className="notifications" ref={ref}>
-                <div className='notifications__header'>
-                    <h2 >Thông báo</h2>
-                    <span className='notifications__header__more-icon'>
-                    <FiMoreHorizontal />
-                    </span>
-                </div>
-                <div className='notifications__type'>
-                    <span className='notifications__type__same select'>Tất cả</span>
-                    <span className='notifications__type__same '>Chưa đọc</span>
-                </div>
-                <div className='notifications__same'>
-                    <div className='notifications__same__header'>
-                        <span className='notifications__same__header__title'>Mới</span>
-                        <span className='notifications__same__header__see-all'>Xem tất cả</span>
-                    </div>
-                    <div className='notifications__items'>
-                        <div className='notifications__items__item'>
-                            <div className='notifications__items__item__image'>
-                                <img src={newNotification[0].image}/>
-                                <span className='notifications__items__item__image__icon'><BsFillCameraReelsFill/></span>
-                            </div>
-                            <div className='notifications__items__item__text'>
-                                <p> <span className='notifications__items__item__text__name'>{newNotification[0].name}</span> đang phát trực tiếp: "{newNotification[0].message}"</p>
-                                <span className='notifications__items__item__text__createdAt'>{newNotification[0].createdAt}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='notifications__same'>
+
+import "./notifications.scss";
+
+import Notification from "./notification";
+const Notifications = forwardRef(({ notifications }, ref) => {
+  return (
+    <div className="notifications" ref={ref}>
+      <div className="notifications__header">
+        <h2>Thông báo</h2>
+        <span className="notifications__header__more-icon">
+          <FiMoreHorizontal />
+        </span>
+      </div>
+      <div className="notifications__type">
+        <span className="notifications__type__same select">Tất cả</span>
+        <span className="notifications__type__same ">Chưa đọc</span>
+      </div>
+      <div className="notifications__same">
+        <div className="notifications__same__header">
+          <span className="notifications__same__header__title">Mới</span>
+          <span className="notifications__same__header__see-all">
+            Xem tất cả
+          </span>
+        </div>
+        <div className="notifications__items">
+          {notifications.map((n, i) => (
+            <Notification notification={n} key={i} />
+          ))}
+        </div>
+      </div>
+      {/* <div className='notifications__same'>
                     <div className='notifications__same__header'>
                         <span className='notifications__same__header__title'>Lời mời kết bạn</span>
                         <span className='notifications__same__header__see-all'>Xem tất cả</span>
@@ -63,8 +53,8 @@ const ComNotification = forwardRef((props, ref) =>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='notifications__same'>
+                </div> */}
+      {/* <div className='notifications__same'>
                     <div className='notifications__same__header'>
                         <span className='notifications__same__header__title'>Trước đó</span>
                         <span className='notifications__same__header__see-all'>Xem tất cả</span>
@@ -86,9 +76,9 @@ const ComNotification = forwardRef((props, ref) =>
                     ))}
                         
                     </div>
-                </div>
-        </div>
-    );
+                </div> */}
+    </div>
+  );
 });
 
-export default ComNotification;
+export default Notifications;

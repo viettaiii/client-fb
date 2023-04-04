@@ -12,6 +12,7 @@ import {userInfoReducer} from './reducers/info';
 import {conversationsReducer} from './reducers/conversation';
 import {chatsReducer} from './reducers/messenge';
 import {usersReducer} from './reducers/user';
+import {notificationsReducer} from './reducers/notification';
 import Raven from 'raven-js';
 const crashReporter = store => next => action => {
     try {
@@ -31,6 +32,7 @@ const crashReporter = store => next => action => {
   
 const reducer = combineReducers({
   messenges:chatsReducer,
+  notifications:notificationsReducer,
   users:usersReducer,
   conversations:conversationsReducer,
   userInfo : userInfoReducer,
