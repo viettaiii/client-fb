@@ -1,6 +1,6 @@
 import Header from "../Header";
 import LeftBar from "../LeftBar";
-import Toasts from "../Modal/Toasts";
+import Toasts from '../../components/Modal/Toasts'
 
 import RightBar from "../RightBar";
 

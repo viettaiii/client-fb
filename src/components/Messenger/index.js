@@ -1,43 +1,37 @@
 import {  useContext, useEffect,  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 // My imports
 import Conversations from "../Conversations";
-import { getConversations } from "../../redux/actions/conversation";
 import Header from "../Header";
 import Messenges from "../Messenges";
 import { getMessages } from "../../redux/actions/messenge";
 import "./messenger.scss";
 import { SocketContext } from "../../context/socketContext";
+import { useParams } from "react-router-dom";
 function Messenger() {
+  const params = useParams();
+  const conversationId  = parseInt(params.conversationId);
   const {usersOn}= useContext(SocketContext);
   const dispatch = useDispatch();
   const [currentMess, setCurrentMess] = useState();
-  const { conversations } = useSelector((state) => state.conversations);
-  const { messenges , sending } = useSelector((state) => state.messenges);
+  const { messenges  } = useSelector((state) => state.messenges);
   useEffect(() => {
-    dispatch(getConversations());
-    conversations.length > 0 &&
-      dispatch(getMessages(conversations[0].id));
-  }, []);
-  useEffect(() => {
-    if (!currentMess) setCurrentMess(conversations[0]);
-    currentMess && dispatch(getMessages(currentMess.id));
-  }, [conversations, currentMess]);
+    dispatch(getMessages(conversationId));
+  }, [conversationId]);
   return (
     <>
       <Header />
       <div className="messenger">
         <Conversations
           usersOn={usersOn}
+          conversationId={parseInt(conversationId)}
           setCurrentMess={setCurrentMess}
           currentMess={currentMess && currentMess}
-          conversations={conversations}
+       
         />
         <Messenges
-          currentMess={currentMess}
+          conversationId={conversationId}
           messenges={messenges}
-          sending={sending}
         />
         <div className="online">
             

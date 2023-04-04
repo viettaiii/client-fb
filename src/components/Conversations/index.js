@@ -1,7 +1,11 @@
 import { AiOutlineSearch } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { routesPublic } from "../../config/routes";
 import Conversation from "./Conversation";
 import "./conversations.scss";
-function Conversations({ conversations, currentMess  ,setCurrentMess ,usersOn}) {
+function Conversations({conversationId,usersOn}) {
+  const { conversations } = useSelector((state) => state.conversations);
   return (
     <div className="conversations">
       <div className="conversations__top">
@@ -13,9 +17,9 @@ function Conversations({ conversations, currentMess  ,setCurrentMess ,usersOn}) 
       </div>
       <div className="conversations__bottom">
         {conversations.length > 0 &&  conversations.map((c, i) => (
-          <div onClick={() => setCurrentMess(c)}>
-          <Conversation usersOn={usersOn} active={currentMess && c.id === currentMess.id} conversation={c} key={i} />
-          </div>
+          <Link to={routesPublic.messenger + "/" + c.id} >
+          <Conversation usersOn={usersOn} active={conversationId && c.id === conversationId} conversation={c} key={i} />
+          </Link>
         ))}
       </div>
     </div>

@@ -32,7 +32,7 @@ const MakeConversation = forwardRef(({ setShowMakeConversation }, ref) => {
       return;
     }
     dispatch(addConversation(userId));
-    navigate(routesPublic.messenger);
+    navigate(routesPublic.messenger + "/" + (parseInt(conversations[conversations.length - 1].id) + 1));
   };
   return (
     <div className="modal-make-conversation">

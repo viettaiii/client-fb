@@ -12,6 +12,15 @@ export const getUserAxios = async (userId) =>  {
    }
 }
 
+
+export const getConversationAxios = async (conversationId) =>  {
+    try {
+        const {data} = await httpsRequest.get('/api/conversations/'+conversationId);
+       return data;
+   }catch(e) {
+       console.log("Error" , e);
+   }
+}
 export const getMessagesAxios = async (conversationId) => {
     try {
         const {data} = await httpsRequest.get('/api/messenges/' + conversationId);

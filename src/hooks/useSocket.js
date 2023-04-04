@@ -70,5 +70,5 @@ export function useSocket() {
     setArrivalSuggestFriend(null);
   },[arrivalSuggestFriend])
 
-  return { usersOn, sendMessage, sendSuggestFriend  ,arrivalSuggestFriend};
+  return { usersOn, sendMessage, sendSuggestFriend  ,arrivalSuggestFriend ,arrivalMess};
 }

@@ -1,6 +1,14 @@
 import "./profile.scss";
-import { Link, useParams } from "react-router-dom";
-import { forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { BsCameraFill } from "react-icons/bs";
 import { CiImageOn, CiLocationOn, CiTrash, CiWifiOn } from "react-icons/ci";
 import { IoIosMore, IoMdAdd } from "react-icons/io";
@@ -33,25 +41,26 @@ import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 import { useFileImage } from "../../hooks/useFileImage";
 import Share from "../../components/Share";
-import Posts from '../../components/Posts'
+import Posts from "../../components/Posts";
 import { SocketContext } from "../../context/socketContext";
+import { addConversation, getConversations } from "../../redux/actions/conversation";
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
   const skeleton = useFirstGoToPage();
-  const {sendSuggestFriend} = useContext(SocketContext);
-  const { userId } = useParams();
+  const { sendSuggestFriend } = useContext(SocketContext);
+  const params = useParams();
+  const userId = parseInt(params.userId);
   const editCoverPicRef = useRef();
   const [showEditCoverPic, setShowEditCoverPic] =
-  useClickOutSide(editCoverPicRef);
+    useClickOutSide(editCoverPicRef);
   const imageUserRef = useRef();
   const [showImageUser, setShowImageUser] = useClickOutSide(imageUserRef);
   const updateAvatarRef = useRef();
   const [showModalUpdateAvatar, setShowModalUpdateAvatar] =
-  useClickOutSide(updateAvatarRef);
+    useClickOutSide(updateAvatarRef);
   const todosFavoriteRef = useRef();
   const [modalTodoFavorite, setModalTodoFavorite] =
     useClickOutSide(todosFavoriteRef);
-
 
   const dispatch = useDispatch();
   const handleFile = useFileImage();
@@ -69,16 +78,18 @@ function Profile() {
   const { currentUser, update } = useContext(UserContext);
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userProfile } = useSelector((state) => state.userProfile);
-
+  const { conversations } = useSelector((state) => state.conversations);
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getStories());
     dispatch(getUserInfo(userId));
-  }, [dispatch ,userId]);
+    dispatch(getConversations());
+  }, [dispatch, userId]);
   useLayoutEffect(() => {
     dispatch(getUserProfile(userId));
     dispatch(getUserFriends(userId));
     dispatch(getFriendsRequest());
-  }, [userId , dispatch]);
+  }, [userId, dispatch]);
   const handleCoverPic = (e) => {
     setShowSpinner(true);
     setTimeout(() => {
@@ -111,8 +122,7 @@ function Profile() {
   });
 
   const handleAddFriendRequest = async () => {
-    sendSuggestFriend({senderUserId : currentUser.id , receiverUserId : userId})
-   
+    sendSuggestFriend({ senderUserId: currentUser.id, receiverUserId: userId });
   };
   const handleDeleteRequest = async () => {
     const values = {
@@ -120,6 +130,20 @@ function Profile() {
       receiverUserId: userId,
     };
     await dispatch(deleteFriendRequest(values));
+  };
+
+  const handleToConversation =  async() => {
+    const conversation = conversations.find(
+      (c) => c.userId_1 === userId || c.userId_2 === userId
+    );
+    if(conversation){
+      navigate(routesPublic.messenger + "/" + conversation.id);
+
+    }else{
+       await dispatch(addConversation(userId));
+      navigate(routesPublic.messenger + "/" + (parseInt(conversations[conversations.length - 1].id) + 1));
+    }
+    
   };
   return (
     <>
@@ -295,11 +319,13 @@ function Profile() {
                             <FaUserFriends /> Bạn bè
                           </button>
                         )}
-
-                        <button className="profile__top__info__user__right__btn profile__top__info__user__right__gray">
+                        <div
+                          onClick={handleToConversation}
+                          className="profile__top__info__user__right__btn profile__top__info__user__right__gray"
+                        >
                           <RiMessengerFill />
                           Nhắn tin
-                        </button>
+                        </div>
                       </>
                     )}
                   </div>
@@ -459,8 +485,8 @@ function Profile() {
             </nav>
           </div>
           <div className="profile__top__content__right">
-                  <Share/>
-                  <Posts ownId={parseInt(userId)}/>
+            <Share />
+            <Posts ownId={parseInt(userId)} />
           </div>
         </div>
         {showImageUser && (

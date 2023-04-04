@@ -80,7 +80,7 @@ const Chat = forwardRef(({  }, ref) => {
       <div className="chat__accounts">
         {conversations.length > 0 &&
           conversations.map((c, index) => (
-            <Link to={routesPublic.messenger} key={index}>
+            <Link to={routesPublic.messenger + '/'+c.id} key={index}>
               <Account conversation={c} />
             </Link>
           ))}

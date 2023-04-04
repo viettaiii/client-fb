@@ -1,7 +1,7 @@
 import { IoMdAddCircleOutline, IoMdImages } from "react-icons/io";
 import { MdGif, MdOutlineInsertEmoticon } from "react-icons/md";
 import { useContext, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+
 
 //My imports
 import Avatar from "../Avatar";
@@ -12,10 +12,10 @@ import CEmojiPicker from "../CEmojiPicker";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useUserFriend } from "../../hooks/useUserFriend";
 import { SocketContext } from "../../context/socketContext";
-function Messenges({ currentMess, messenges }) {
+function Messenges({ messenges  , conversationId  }) {
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
-  const user = useUserFriend(currentMess || null);
+  const user = useUserFriend(conversationId || null);
   const [mess, setMess] = useState("");
   const [showEmoji, setShowEmoji] = useClickOutSide(emojiRef);
   const { usersOn, sendMessage } = useContext(SocketContext);
@@ -25,9 +25,9 @@ function Messenges({ currentMess, messenges }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (mess.trim()) {
-      if (currentMess) {
+      if (conversationId) {
         const values = {
-          conversationId: currentMess.id,
+          conversationId : parseInt(conversationId),
           senderId: currentUser.id,
           text: mess,
           receiverId: user.id,

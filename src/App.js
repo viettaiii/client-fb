@@ -53,7 +53,7 @@ function App() {
       ),
     },
     {
-      path: routesPublic.profile + "/:userId",
+      path: routesPublic.profile  +"/:userId",
       element: (
         <ProtectedRoute>
           <Profile />
@@ -85,7 +85,7 @@ function App() {
       ),
     },
     {
-      path: routesPublic.messenger,
+      path: routesPublic.messenger + "/:conversationId",
       element: (
         <ProtectedRoute>
           <Messenger />
