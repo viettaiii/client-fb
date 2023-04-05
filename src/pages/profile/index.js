@@ -122,12 +122,12 @@ function Profile() {
   });
 
   const handleAddFriendRequest = async () => {
-    sendSuggestFriend({ senderUserId: currentUser.id, receiverUserId: userId });
+    sendSuggestFriend({ senderId: currentUser.id, receiverId: userId });
   };
   const handleDeleteRequest = async () => {
     const values = {
-      senderUserId: currentUser.id,
-      receiverUserId: userId,
+      senderId: currentUser.id,
+      receiverId: userId,
     };
     await dispatch(deleteFriendRequest(values));
   };
@@ -289,8 +289,8 @@ function Profile() {
                         ) ? (
                           friendsRequest.find(
                             (fq) =>
-                              fq.senderUserId === currentUser.id &&
-                              fq.receiverUserId === parseInt(userId)
+                              fq.senderId === currentUser.id &&
+                              fq.receiverId === parseInt(userId)
                           ) ? (
                             <button
                               className="profile__top__info__user__right__btn profile__top__info__user__right__primary"
@@ -300,8 +300,8 @@ function Profile() {
                             </button>
                           ) : friendsRequest.find(
                               (fq) =>
-                                fq.senderUserId === parseInt(userId) &&
-                                fq.receiverUserId === currentUser.id
+                                fq.senderId === parseInt(userId) &&
+                                fq.receiverId === currentUser.id
                             ) ? (
                             <button className="profile__top__info__user__right__btn profile__top__info__user__right__primary">
                               Chấp nhận lời mời

@@ -34,8 +34,8 @@ export const userFriendsRequest = (state = initFriendsRequest, action) => {
         friendsRequest: [
           ...state.friendsRequest.filter(
             (fq) =>
-              fq.senderUserId !== action.payload.senderUserId &&
-              fq.receiverUserId !== action.payload.receiverUserId
+              fq.senderId !== action.payload.senderId &&
+              fq.receiverId !== action.payload.receiverId
           ),
         ],
       };

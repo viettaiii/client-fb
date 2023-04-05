@@ -24,13 +24,12 @@ export const userFriendsReducer= (state = initUserFriends , action) => {
                 case actionTypes.ADD_USER_FRIEND:
                     return {
                         ...state,
-                        userFriends:[...state.userFriends , action.payload]
+                        userFriends:[ action.payload, ...state.userFriends]
                     }
             default :
             return state;
         }
 }
-
 const initUserOthers = {
     userOthers : [],
     isLoading:true,

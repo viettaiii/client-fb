@@ -2,36 +2,102 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import { UserContext } from "../context/authContext";
-import { addFriendRequest, getFriendsRequest } from "../redux/actions/friendRequest";
+import { addUserFriend } from "../redux/actions/friend";
+import {
+  addFriendRequest,
+  deleteFriendRequest,
+  getFriendsRequest,
+} from "../redux/actions/friendRequest";
 import { addMessage } from "../redux/actions/messenge";
-
 export function useSocket() {
-  const { currentUser } = useContext(UserContext);
-  const [arrivalMess, setArrivalMess] = useState(null);
-  const [arrivalSuggestFriend , setArrivalSuggestFriend] = useState(null);
-  const socket = useRef();
-  const [usersOn, setUsersOn] = useState([]);
+  const { socket, usersOn } = useConnect();
+  
+  const { sendMessage, arrivalMess } = useMessage(socket);
+  const { sendSuggestFriend, arrivalSuggestFriend , confirmFriend ,arrivalConfrimFriend } =
+    useSendSuggestFriend(socket);
+ 
+
+
+
+  return {
+    usersOn,
+    sendMessage,
+    sendSuggestFriend,
+    arrivalSuggestFriend,
+    arrivalMess,
+    confirmFriend,
+    arrivalConfrimFriend
+  };
+}
+
+
+// handle send suggest add friend and confirm friend ;
+const useSendSuggestFriend = (socket) => {
+  const [arrivalSuggestFriend, setArrivalSuggestFriend] = useState(null);
+  const [arrivalConfrimFriend, setArrivalConfrimFriend] = useState(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    socket.current = io("ws://localhost:9111");
+  const sendSuggestFriend = useCallback(({ senderId, receiverId }) => {
+    socket.current.emit("sendSuggestFriend", { senderId, receiverId });
+    dispatch(addFriendRequest({ senderId, receiverId }));
   }, []);
+
+  // send suggestion add friend
+  useEffect(() => {
+    socket.current.on(
+      "getSuggestFriend",
+      ({ senderId, receiverId }) => {
+        setArrivalSuggestFriend({
+          senderId,
+          receiverId,
+          createdAt: Date.now(),
+        });
+      }
+    );
+  }, []);
+  useEffect(() => {
+    arrivalSuggestFriend && dispatch(getFriendsRequest());
+    setArrivalSuggestFriend(null);
+  }, [arrivalSuggestFriend]);
+  // confrim add friend
+  const confirmFriend = useCallback(async (inputs) => {
+    socket.current.emit("sendConfirmAddFriend", {
+        senderId : inputs.userId_1,
+        receiverId : inputs.userId_2,
+    })
+    await dispatch(addUserFriend({ userId_1: inputs.userId_1,  userId_2  : inputs.userId_2}));
+    await dispatch(
+      deleteFriendRequest({
+        senderId: inputs.userId_2,
+        receiverId: inputs.userId_1,
+      })
+    );
+  }, []);
+  useEffect(() => {
+    socket.current.on('getConfirmAddFriend', inputs => {
+      console.log(inputs);
+      setArrivalConfrimFriend({
+        senderId: inputs.senderId,
+        receiverId: inputs.receiverId,
+        createdAt:Date.now()
+      })
+    })
+  },[])
+  useEffect(() => {
+      setArrivalConfrimFriend(null);
+  },[arrivalConfrimFriend])
+  return { sendSuggestFriend, arrivalSuggestFriend  , confirmFriend ,arrivalConfrimFriend};
+};
+
+// Handle send message and receive message when user send one message to ;
+const useMessage = (socket) => {
+  const [arrivalMess, setArrivalMess] = useState(null);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (arrivalMess) {
       dispatch(addMessage(arrivalMess));
       setArrivalMess(null);
     }
   }, [arrivalMess]);
-  useEffect(() => {
-    if (
-      window.location.pathname === "/login" ||
-      window.location.pathname === "/register"
-    )
-      return;
-    socket.current.emit("addUser", currentUser.id);
-    socket.current.on("getUsers", (users) => {
-      setUsersOn(users.map((u) => u.userId));
-    });
-  }, [currentUser]);
   const sendMessage = useCallback((data) => {
     socket.current.emit("sendMessage", {
       conversationId: data.conversationId,
@@ -52,23 +118,29 @@ export function useSocket() {
       });
     });
   }, []);
-  const sendSuggestFriend = useCallback(({senderUserId,receiverUserId}) => {
-    socket.current.emit("sendSuggestFriend", {senderUserId,receiverUserId});
-    dispatch(addFriendRequest({senderUserId,receiverUserId}))
+  // End
+  return { sendMessage, arrivalMess };
+};
+
+/// handlle connecting to server and users connected
+const useConnect = () => {
+  const [usersOn, setUsersOn] = useState([]);
+  const { currentUser } = useContext(UserContext);
+  const socket = useRef();
+  useEffect(() => {
+    socket.current = io("ws://localhost:9111");
   }, []);
   useEffect(() => {
-    socket.current.on("getSuggestFriend", ({senderUserId,receiverUserId}) => {
-      setArrivalSuggestFriend({
-        senderUserId,
-        receiverUserId,
-        createdAt:Date.now()
-      })
-    })
-  },[])
-  useEffect(() => {
-    arrivalSuggestFriend && dispatch(getFriendsRequest());
-    setArrivalSuggestFriend(null);
-  },[arrivalSuggestFriend])
+    if (
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register"
+    )
+      return;
+    socket.current.emit("addUser", currentUser.id);
+    socket.current.on("getUsers", (users) => {
+      setUsersOn(users.map((u) => u.userId));
+    });
+  }, [currentUser]);
 
-  return { usersOn, sendMessage, sendSuggestFriend  ,arrivalSuggestFriend ,arrivalMess};
-}
+  return { socket, usersOn };
+};

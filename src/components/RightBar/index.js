@@ -11,11 +11,10 @@ import { UserContext } from "../../context/authContext";
 import LoadingSkeleton from "../LoadingSkeleton";
 import Button from "../Button";
 import {
-  deleteFriendRequest,
   getFriendsRequest,
 } from "../../redux/actions/friendRequest";
 import {
-  addUserFriend,
+
   getUserFriends,
   getUserOthers,
 } from "../../redux/actions/friend";
@@ -28,7 +27,7 @@ function RightBar() {
   const { userFriends } = useSelector((state) => state.userFriends);
   const { userOthers } = useSelector((state) => state.userOthers);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);
-  const {usersOn}= useContext(SocketContext);
+  const {usersOn ,confirmFriend}= useContext(SocketContext);
   const dispatch = useDispatch();
   const { currentUser } = useContext(UserContext);
   useEffect(() => {
@@ -37,13 +36,8 @@ function RightBar() {
     dispatch(getFriendsRequest());
   }, [dispatch]);
   const handleAddFriend = async (userId_2) => {
-    await dispatch(addUserFriend({ userId_1: currentUser.id, userId_2 }));
-    await dispatch(
-      deleteFriendRequest({
-        receiverUserId: currentUser.id,
-        senderUserId: userId_2,
-      })
-    );
+   const inputs = { userId_1: currentUser.id, userId_2 };
+   await  confirmFriend(inputs)
   };
   return (
     <div className="right-bar">
@@ -57,7 +51,7 @@ function RightBar() {
               <span>Xem tất cả</span>
             </div>
             {friendsRequest
-              .filter((item) => item.receiverUserId === currentUser.id)
+              .filter((item) => item.receiverId === currentUser.id)
               .slice(0, 2)
               .map((user, index) => (
                 <div key={index} className="right-bar__items__item">

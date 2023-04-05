@@ -24,12 +24,12 @@ export const receiverFriendRequest = () => (dispatch) => {
 };
 
 export const addFriendRequest =
-  ({senderUserId,receiverUserId}) =>
+  ({senderId,receiverId}) =>
   async (dispatch) => {
     try {
       const { data } = await httpsRequest.post("/api/friends-request", {
-        senderUserId,
-        receiverUserId,
+        senderId,
+        receiverId,
       });
       dispatch({
         type: actionTypes.ADD_FRIEND_REQUEST,
@@ -41,15 +41,15 @@ export const addFriendRequest =
   };
 
 export const deleteFriendRequest =
-  ({ receiverUserId, senderUserId }) =>
+  ({ senderId,receiverId  }) =>
   async (dispatch) => {
     try {
       await httpsRequest.delete("/api/friends-request ", {
-        data: { senderUserId, receiverUserId },
+        data: { senderId, receiverId },
       });
       dispatch({
         type: actionTypes.DELETE_FRIEND_REQUEST,
-        payload: { receiverUserId, senderUserId },
+        payload: { senderId,receiverId },
       });
     } catch (e) {
       console.log("Error", e);
