@@ -33,7 +33,7 @@ export const addLike =  (inputs) => async (dispatch) => {
 
 export const deleteLike =  (inputs) => async (dispatch) => {
     try {
-        await httpsRequest.delete('/likes/'+ inputs.postId );
+        await httpsRequest.delete('/api/likes/'+ inputs.postId );
        dispatch({
         type:actionTypes.DELETE_LIKE,
         payload : {

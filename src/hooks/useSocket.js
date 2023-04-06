@@ -40,9 +40,9 @@ const useLike = (socket) => {
   const [arrivalLike, setArrivalLike] = useState(null);
   const dispatch = useDispatch();
   //senderId , receiverId , postId
-  const sendLike = useCallback((values) => {
+  const sendLike = useCallback(async (values) => {
     socket.current.emit("sendLike", (values));
-    dispatch(addLike({ postId: values.postId }));
+    await dispatch(addLike(values));
   }, []);
   useEffect(() => {
     socket.current.on("getLike", (data) => {
@@ -56,8 +56,10 @@ const useLike = (socket) => {
   }, []);
 
   useEffect(() => {
-    arrivalLike && dispatch(addLike({ postId: arrivalLike.postId }));
-    setArrivalLike(null);
+    if(arrivalLike) {
+     
+      dispatch(addLike({postId :arrivalLike.postId , senderId : arrivalLike.senderId  }));
+    }
   }, [arrivalLike]);
   return { arrivalLike, sendLike };
 };
@@ -104,7 +106,6 @@ const useSendSuggestFriend = (socket) => {
   }, []);
   useEffect(() => {
     socket.current.on("getConfirmAddFriend", (inputs) => {
-      console.log(inputs);
       setArrivalConfrimFriend({
         senderId: inputs.senderId,
         receiverId: inputs.receiverId,
