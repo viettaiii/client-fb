@@ -43,6 +43,6 @@ export const deleteLike =  (inputs) => async (dispatch) => {
       })
     }
     catch(e) {
-        console.log("Error",e);
+        console.log("Error delete",e);
     }
 }

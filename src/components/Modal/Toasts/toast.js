@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routesPublic } from "../../../config/routes";
 import { getConversations } from "../../../redux/actions/conversation";
 import Avatar from "../../Avatar";
@@ -28,13 +28,11 @@ function Toast({ toast, type }) {
     }
   };
   return (
-    <div
-      to={routesPublic.profile + "/" + toast.id}
+    <Link to={toast.navigate}
       className="toast d-block"
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      onClick={handleToPage}
     >
       <div className="toast-header">
         <span className="toast-header__avatar me-2">
@@ -54,7 +52,7 @@ function Toast({ toast, type }) {
       <div className="toast-body fs-5">
         {toast.firstName + " " + toast.lastName + " , " + toast.text}
       </div>
-    </div>
+    </Link>
   );
 }
 

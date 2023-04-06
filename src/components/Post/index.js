@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 /// _my imports
 import "./post.scss";
 import Commnents from "../Comments";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { getComments } from "../../redux/actions/comment";
@@ -20,33 +20,42 @@ import LoadingSkeleton from "../LoadingSkeleton";
 import Avatar from "../Avatar";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
+import { SocketContext } from "../../context/socketContext";
 function Post({ post }) {
   const commentsRef = useRef();
   const skeleton = useFirstGoToPage();
   const { currentUser } = useContext(UserContext);
-  const commentsRe = useSelector((state) => state.comments);
-  const { isLoading, comments } = commentsRe;
-  const likesRe = useSelector((state) => state.likes);
-  const { likes } = likesRe;
+  const { sendLike } = useContext(SocketContext);
+  const { isLoading, comments } = useSelector((state) => state.comments);
+  const { likes } = useSelector((state) => state.likes);
   const [showCommnent, setShowComment] = useClickOutSide(commentsRef);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getComments());
     dispatch(getLikes());
-  }, [dispatch]);
+  }, [dispatch, post]);
+
   const handleLike = async () => {
     if (
-      likes &&
       likes.length > 0 &&
       likes.find(
         (like) => like.postId === post.id && like.userId === currentUser.id
       )
     ) {
-      await dispatch(deleteLike({ postId: post.id, userId: currentUser.id }));
+      const values = { postId: post.id, userId: currentUser.id };
+      await dispatch(deleteLike(values));
     } else {
-      await dispatch(addLike({ postId: post.id }));
+      const values = {
+        postId: post.id,
+        senderId: currentUser.id,
+        receiverId: post.userId,
+      };
+      await sendLike(values);
+      // console.log({postId :post.id , senderId:currentUser.id , receiverId : post.userId})
+      // await dispatch(addLike({ postId: post.id }));
     }
   };
+
   const handleDelete = async () => {
     await dispatch(deletePost(post.id));
   };

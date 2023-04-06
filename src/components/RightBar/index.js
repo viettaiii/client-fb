@@ -14,7 +14,6 @@ import {
   getFriendsRequest,
 } from "../../redux/actions/friendRequest";
 import {
-
   getUserFriends,
   getUserOthers,
 } from "../../redux/actions/friend";

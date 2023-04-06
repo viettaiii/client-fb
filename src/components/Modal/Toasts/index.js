@@ -6,14 +6,22 @@ import Toast from "./toast";
 
 import "./toasts.scss";
 
-
-
 function Toasts() {
-  const { arrivalSuggestFriend, arrivalMess ,arrivalConfrimFriend } = useContext(SocketContext);
-  const {toasts , type} = useToast({ arrivalSuggestFriend, arrivalMess ,arrivalConfrimFriend })
-  console.log(arrivalConfrimFriend);
+  const {
+    arrivalSuggestFriend,
+    arrivalMess,
+    arrivalConfrimFriend,
+    arrivalLike,
+  } = useContext(SocketContext);
+  const { toasts, type } = useToast({
+    arrivalSuggestFriend,
+    arrivalMess,
+    arrivalConfrimFriend,
+    arrivalLike,
+  });
+
   return (
-    <div className="toasts" >
+    <div className="toasts">
       {toasts.map((toast, i) => (
         <Toast key={i} toast={toast} type={type} />
       ))}

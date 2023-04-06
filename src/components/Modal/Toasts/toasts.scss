@@ -2,13 +2,13 @@
 
 .toasts {
   @include themify($themes) {
-    position: absolute;
+    position: fixed;
     width: 310px;
     max-height: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    top: 0px;
+    top: 62px;
     right: 20px;
     z-index: 11;
     .toast {

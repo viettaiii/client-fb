@@ -4,7 +4,7 @@ import { IoMdNotifications } from "react-icons/io";
 import { TiThMenu } from "react-icons/ti";
 import TextHover from "../TextHover";
 import AccountFuture from "../AccountFuture";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import "./header-right.scss";
 import Chat from "../../Chat";
 import Menu from "../../Menu";
@@ -12,7 +12,6 @@ import { UserContext } from "../../../context/authContext";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
 import { useDispatch, useSelector } from "react-redux";
-import { getMessages } from "../../../redux/actions/messenge";
 import { useClickOutSide } from "../../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 import { SocketContext } from "../../../context/socketContext";
@@ -26,7 +25,6 @@ function HeaderRight({ isHideMessage }) {
   const notificationRef = useRef();
   const chatRef = useRef();
   const menuRef = useRef();
-  const [currentMess, setCurrentMess] = useState({});
   const { currentUser } = useContext(UserContext);
   const [showAccountSetting, setShowAccountSetting] =
     useClickOutSide(accountRef);
@@ -37,9 +35,6 @@ function HeaderRight({ isHideMessage }) {
   
   const dispatch = useDispatch();
   const { notifications } = useSelector((state) => state.notifications);
-  useEffect(() => {
-    currentMess && dispatch(getMessages(currentMess.id));
-  }, [currentMess]);
   useEffect(() => {
     dispatch(getNotifications());
   }, [dispatch]);
@@ -88,7 +83,6 @@ function HeaderRight({ isHideMessage }) {
               {showChat && (
                 <Chat
                   usersOn={usersOn}
-                  setCurrentMess={setCurrentMess}
                   setShowChat={setShowChat}
                   ref={chatRef}
                 />

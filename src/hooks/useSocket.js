@@ -8,16 +8,18 @@ import {
   deleteFriendRequest,
   getFriendsRequest,
 } from "../redux/actions/friendRequest";
+import { addLike } from "../redux/actions/like";
 import { addMessage } from "../redux/actions/messenge";
 export function useSocket() {
   const { socket, usersOn } = useConnect();
-  
+  const { arrivalLike, sendLike } = useLike(socket);
   const { sendMessage, arrivalMess } = useMessage(socket);
-  const { sendSuggestFriend, arrivalSuggestFriend , confirmFriend ,arrivalConfrimFriend } =
-    useSendSuggestFriend(socket);
- 
-
-
+  const {
+    sendSuggestFriend,
+    arrivalSuggestFriend,
+    confirmFriend,
+    arrivalConfrimFriend,
+  } = useSendSuggestFriend(socket);
 
   return {
     usersOn,
@@ -26,10 +28,39 @@ export function useSocket() {
     arrivalSuggestFriend,
     arrivalMess,
     confirmFriend,
-    arrivalConfrimFriend
+    arrivalConfrimFriend,
+    arrivalLike,
+    sendLike,
   };
 }
 
+// hadnle like
+
+const useLike = (socket) => {
+  const [arrivalLike, setArrivalLike] = useState(null);
+  const dispatch = useDispatch();
+  //senderId , receiverId , postId
+  const sendLike = useCallback((values) => {
+    socket.current.emit("sendLike", (values));
+    dispatch(addLike({ postId: values.postId }));
+  }, []);
+  useEffect(() => {
+    socket.current.on("getLike", (data) => {
+      setArrivalLike({
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        createdAt: Date.now(),
+        postId: data.postId,
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalLike && dispatch(addLike({ postId: arrivalLike.postId }));
+    setArrivalLike(null);
+  }, [arrivalLike]);
+  return { arrivalLike, sendLike };
+};
 
 // handle send suggest add friend and confirm friend ;
 const useSendSuggestFriend = (socket) => {
@@ -43,16 +74,13 @@ const useSendSuggestFriend = (socket) => {
 
   // send suggestion add friend
   useEffect(() => {
-    socket.current.on(
-      "getSuggestFriend",
-      ({ senderId, receiverId }) => {
-        setArrivalSuggestFriend({
-          senderId,
-          receiverId,
-          createdAt: Date.now(),
-        });
-      }
-    );
+    socket.current.on("getSuggestFriend", ({ senderId, receiverId }) => {
+      setArrivalSuggestFriend({
+        senderId,
+        receiverId,
+        createdAt: Date.now(),
+      });
+    });
   }, []);
   useEffect(() => {
     arrivalSuggestFriend && dispatch(getFriendsRequest());
@@ -61,10 +89,12 @@ const useSendSuggestFriend = (socket) => {
   // confrim add friend
   const confirmFriend = useCallback(async (inputs) => {
     socket.current.emit("sendConfirmAddFriend", {
-        senderId : inputs.userId_1,
-        receiverId : inputs.userId_2,
-    })
-    await dispatch(addUserFriend({ userId_1: inputs.userId_1,  userId_2  : inputs.userId_2}));
+      senderId: inputs.userId_1,
+      receiverId: inputs.userId_2,
+    });
+    await dispatch(
+      addUserFriend({ userId_1: inputs.userId_1, userId_2: inputs.userId_2 })
+    );
     await dispatch(
       deleteFriendRequest({
         senderId: inputs.userId_2,
@@ -73,19 +103,24 @@ const useSendSuggestFriend = (socket) => {
     );
   }, []);
   useEffect(() => {
-    socket.current.on('getConfirmAddFriend', inputs => {
+    socket.current.on("getConfirmAddFriend", (inputs) => {
       console.log(inputs);
       setArrivalConfrimFriend({
         senderId: inputs.senderId,
         receiverId: inputs.receiverId,
-        createdAt:Date.now()
-      })
-    })
-  },[])
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
   useEffect(() => {
-      setArrivalConfrimFriend(null);
-  },[arrivalConfrimFriend])
-  return { sendSuggestFriend, arrivalSuggestFriend  , confirmFriend ,arrivalConfrimFriend};
+    setArrivalConfrimFriend(null);
+  }, [arrivalConfrimFriend]);
+  return {
+    sendSuggestFriend,
+    arrivalSuggestFriend,
+    confirmFriend,
+    arrivalConfrimFriend,
+  };
 };
 
 // Handle send message and receive message when user send one message to ;
