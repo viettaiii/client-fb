@@ -60,150 +60,161 @@ function Post({ post }) {
     await dispatch(deletePost(post.id));
   };
   return (
-    <div className="post">
-      <div className="post__header">
-        <Link
-          to={routesPublic.profile + "/" + post.userId}
-          className="post__header__avatar"
-        >
-          {skeleton ? (
-            <LoadingSkeleton circle="true" />
-          ) : (
-            <Avatar image={post.profilePic} alt={post.fistName} />
-          )}
-        </Link>
-        <div className="post__header__info ">
-          <>
-            <span className="post__header__info__name">
+    <>
+      {post && (
+        <div className="post">
+          <div className="post__header">
+            <Link
+              to={routesPublic.profile + "/" + post.userId}
+              className="post__header__avatar"
+            >
+              {skeleton ? (
+                <LoadingSkeleton circle="true" />
+              ) : (
+                <Avatar image={post.profilePic} alt={post.fistName} />
+              )}
+            </Link>
+            <div className="post__header__info ">
+              <>
+                <span className="post__header__info__name">
+                  {skeleton ? (
+                    <LoadingSkeleton />
+                  ) : (
+                    <>{post.firstName + " " + post.lastName}</>
+                  )}
+                </span>
+                <>
+                  <span className="post__header__info__createdAt ">
+                    {skeleton ? (
+                      <LoadingSkeleton />
+                    ) : (
+                      <> {moment(post.createdAt).fromNow("mm")}</>
+                    )}
+                  </span>
+                </>
+              </>
+            </div>
+
+            <div className="post__header__options">
+              <span className="post__header__options__icon">
+                {skeleton ? (
+                  <LoadingSkeleton circle="true" />
+                ) : (
+                  <>
+                    {" "}
+                    <RiMoreLine />
+                  </>
+                )}
+              </span>
+              {post.userId === currentUser.id && (
+                <span
+                  className="post__header__options__icon"
+                  onClick={handleDelete}
+                >
+                  {skeleton ? (
+                    <LoadingSkeleton />
+                  ) : (
+                    <>
+                      {" "}
+                      <MdOutlineClose circle="true" />
+                    </>
+                  )}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="post__body ">
+            <p className="post__body__desc ">
+              {skeleton ? <LoadingSkeleton /> : <>{post.desc}</>}
+            </p>
+
+            <span className="post__body__image">
               {skeleton ? (
                 <LoadingSkeleton />
               ) : (
-                <>{post.firstName + " " + post.lastName}</>
+                <>
+                  {post.image && (
+                    <>
+                      {post.image.endsWith(".mov") ||
+                      post.image.endsWith(".mp4") ? (
+                        <video
+                          playsInline
+                          controls
+                          src={"/uploads/" + post.image}
+                          alt={post.fistName}
+                        />
+                      ) : (
+                        <img
+                          src={"/uploads/" + post.image}
+                          alt={post.fistName}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </span>
-            <>
-              <span className="post__header__info__createdAt ">
-                {skeleton ? (
-                  <LoadingSkeleton />
-                ) : (
-                  <> {moment(post.createdAt).fromNow("mm")}</>
-                )}
-              </span>
-            </>
-          </>
-        </div>
+          </div>
+          <div className="post__bottom ">
+            <div className="post__bottom__one" onClick={handleLike}>
+              {skeleton ? (
+                <LoadingSkeleton />
+              ) : (
+                <>
+                  {likes.find(
+                    (like) =>
+                      like.postId === post.id && like.userId === currentUser.id
+                  ) ? (
+                    <AiFillLike />
+                  ) : (
+                    <AiOutlineLike />
+                  )}
+                  {likes.filter((like) => like.postId === post.id).length} Thích
+                </>
+              )}
+            </div>
 
-        <div className="post__header__options">
-          <span className="post__header__options__icon">
-            {skeleton ? (
-              <LoadingSkeleton circle="true" />
-            ) : (
-              <>
-                {" "}
-                <RiMoreLine />
-              </>
-            )}
-          </span>
-          {post.userId === currentUser.id && (
-            <span
-              className="post__header__options__icon"
-              onClick={handleDelete}
+            <div
+              className="post__bottom__one "
+              onClick={() => setShowComment(!showCommnent)}
             >
               {skeleton ? (
                 <LoadingSkeleton />
               ) : (
                 <>
                   {" "}
-                  <MdOutlineClose circle="true" />
+                  <GoComment />
+                  {comments.filter((com) => com.postId === post.id).length} Bình
+                  luận
                 </>
               )}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className="post__body ">
-        <p className="post__body__desc ">
-          {skeleton ? <LoadingSkeleton /> : <>{post.desc}</>}
-        </p>
+            </div>
 
-        <span className="post__body__image">
-          {skeleton ? (
-            <LoadingSkeleton />
-          ) : (
-            <>
-              {" "}
-              {post.image.endsWith(".mov") || post.image.endsWith(".mp4") ? (
-                <video
-                  playsInline
-                  controls
-                  src={"/uploads/" + post.image}
-                  alt={post.fistName}
+            <div className="post__bottom__one ">
+              {skeleton ? (
+                <LoadingSkeleton />
+              ) : (
+                <>
+                  {" "}
+                  <CiShare2 />
+                  12 Chia sẻ
+                </>
+              )}
+            </div>
+          </div>
+          {isLoading
+            ? "Loading..."
+            : showCommnent && (
+                <Commnents
+                  ref={commentsRef}
+                  postId={post.id}
+                  comments={comments}
+                  showCommnent={showCommnent}
                 />
-              ) : (
-                <img src={"/uploads/" + post.image} alt={post.fistName} />
               )}
-            </>
-          )}
-        </span>
-      </div>
-      <div className="post__bottom ">
-        <div className="post__bottom__one" onClick={handleLike}>
-          {skeleton ? (
-            <LoadingSkeleton />
-          ) : (
-            <>
-              {likes.find(
-                (like) =>
-                  like.postId === post.id && like.userId === currentUser.id
-              ) ? (
-                <AiFillLike />
-              ) : (
-                <AiOutlineLike />
-              )}
-              {likes.filter((like) => like.postId === post.id).length} Thích
-            </>
-          )}
         </div>
-
-        <div
-          className="post__bottom__one "
-          onClick={() => setShowComment(!showCommnent)}
-        >
-          {skeleton ? (
-            <LoadingSkeleton />
-          ) : (
-            <>
-              {" "}
-              <GoComment />
-              {comments.filter((com) => com.postId === post.id).length} Bình
-              luận
-            </>
-          )}
-        </div>
-
-        <div className="post__bottom__one ">
-          {skeleton ? (
-            <LoadingSkeleton />
-          ) : (
-            <>
-              {" "}
-              <CiShare2 />
-              12 Chia sẻ
-            </>
-          )}
-        </div>
-      </div>
-      {isLoading
-        ? "Loading..."
-        : showCommnent && (
-            <Commnents
-              ref={commentsRef}
-              postId={post.id}
-              comments={comments}
-              showCommnent={showCommnent}
-            />
-          )}
-    </div>
+      )}
+    </>
   );
 }
 

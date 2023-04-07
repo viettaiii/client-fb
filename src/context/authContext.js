@@ -9,6 +9,7 @@ export const ProviderUserContext = ({children}) => {
         setCurrentUser(data.info);
     }
     const logout = () => {
+        localStorage.setItem('token' ,JSON.stringify(null) );
         setCurrentUser(null);
     }
     const update = (info) => {

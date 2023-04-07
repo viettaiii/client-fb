@@ -5,7 +5,7 @@ import { routesPublic } from "../../config/routes";
 import Conversation from "./Conversation";
 import "./conversations.scss";
 function Conversations({conversationId,usersOn}) {
-  const { conversations } = useSelector((state) => state.conversations);
+  const {  isLoading,conversations } = useSelector((state) => state.conversations);
   return (
     <div className="conversations">
       <div className="conversations__top">
@@ -16,7 +16,7 @@ function Conversations({conversationId,usersOn}) {
         </div>
       </div>
       <div className="conversations__bottom">
-        {conversations.length > 0 &&  conversations.map((c, i) => (
+        {isLoading ?<SpinnerEllipsis/> : conversations.map((c, i) => (
           <Link to={routesPublic.messenger + "/" + c.id} >
           <Conversation usersOn={usersOn} active={conversationId && c.id === conversationId} conversation={c} key={i} />
           </Link>

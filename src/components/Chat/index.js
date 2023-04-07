@@ -14,12 +14,13 @@ import MakeConversation from "../Modal/MakeConversation";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
+import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
 const Chat = forwardRef(({  }, ref) => {
   const makeConversationRef = useRef();
   const [showIconSearch, setShowIconSearch] = useState(true);
   const [showMakeConversation, setShowMakeConversation] =
   useClickOutSide(makeConversationRef);
-  const { conversations } = useSelector((state) => state.conversations);
+  const {isLoading, conversations } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getConversations());
@@ -78,10 +79,10 @@ const Chat = forwardRef(({  }, ref) => {
                     <BsChevronCompactRight className='chat__message-watting__icon'/>
                     </div> */}
       <div className="chat__accounts">
-        {conversations.length > 0 &&
+        {isLoading ? <SpinnerEllipsis/>:
           conversations.map((c, index) => (
             <Link to={routesPublic.messenger + '/'+c.id} key={index}>
-              <Account conversation={c} />
+                <Account conversation={c} />
             </Link>
           ))}
         <button

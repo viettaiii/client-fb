@@ -43,7 +43,11 @@ import { useFileImage } from "../../hooks/useFileImage";
 import Share from "../../components/Share";
 import Posts from "../../components/Posts";
 import { SocketContext } from "../../context/socketContext";
-import { addConversation, getConversations } from "../../redux/actions/conversation";
+import {
+  addConversation,
+  getConversations,
+} from "../../redux/actions/conversation";
+import { getPosts } from "../../redux/actions/post";
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
   const skeleton = useFirstGoToPage();
@@ -77,7 +81,7 @@ function Profile() {
   const [showSpinner, setShowSpinner] = useState(false);
   const { currentUser, update } = useContext(UserContext);
   const { userFriends } = useSelector((state) => state.userFriends);
-  const { userProfile } = useSelector((state) => state.userProfile);
+  const { isLoading, userProfile } = useSelector((state) => state.userProfile);
   const { conversations } = useSelector((state) => state.conversations);
   const navigate = useNavigate();
   useEffect(() => {
@@ -131,19 +135,20 @@ function Profile() {
     };
     await dispatch(deleteFriendRequest(values));
   };
-
-  const handleToConversation =  async() => {
+  const handleToConversation = async () => {
     const conversation = conversations.find(
       (c) => c.userId_1 === userId || c.userId_2 === userId
     );
-    if(conversation){
+    if (conversation) {
       navigate(routesPublic.messenger + "/" + conversation.id);
-
-    }else{
-       await dispatch(addConversation(userId));
-      navigate(routesPublic.messenger + "/" + (parseInt(conversations[conversations.length - 1].id) + 1));
+    } else {
+      await dispatch(addConversation(userId));
+      navigate(
+        routesPublic.messenger +
+          "/" +
+          (parseInt(conversations[conversations.length - 1].id) + 1)
+      );
     }
-    
   };
   return (
     <>
@@ -223,51 +228,57 @@ function Profile() {
                 <LoadingSkeleton />
               ) : (
                 <>
-                  <div className="profile__top__info__user__left">
-                    <>
-                      <span className="profile__top__info__user__left__avatar">
-                        <>
-                          <span className="profile__top__info__user__left__avatar__image">
-                            <span>
-                              <img
-                                src={
-                                  "/uploads/" +
-                                  (userProfile.profilePic
-                                    ? userProfile.profilePic
-                                    : "no-image.webp")
-                                }
-                                alt={""}
-                              />
+                  {isLoading ? (
+                    <h1 style={{color:"red"}}>Loading...</h1>
+                  ) : (
+                    <div className="profile__top__info__user__left">
+                      <>
+                        <span className="profile__top__info__user__left__avatar">
+                          <>
+                            <span className="profile__top__info__user__left__avatar__image">
+                              <span>
+                                <img
+                                  src={
+                                    "/uploads/" +
+                                    (userProfile.profilePic
+                                      ? userProfile.profilePic
+                                      : "no-image.webp")
+                                  }
+                                  alt={""}
+                                />
+                              </span>
                             </span>
-                          </span>
-                          {currentUser.id === parseInt(userId) && (
-                            <div onClick={() => setShowModalUpdateAvatar(true)}>
-                              <BsCameraFill />
-                            </div>
-                          )}
-                        </>
-                      </span>
-                      <div className="profile__top__info__user__left__info">
-                        <h3>
-                          {userProfile.firstName + " " + userProfile.lastName}
-                        </h3>
-                        <span>{userFriends.length} bạn bè</span>
-                        <div className="profile__top__info__user__left__info__list-image">
-                          {userFriends.slice(0, 7).map((friend, index) => (
-                            <Link
-                              key={index}
-                              to={routesPublic.profile + "/" + friend.id}
-                            >
-                              <img
-                                src={"/uploads/" + friend.profilePic}
-                                alt=""
-                              />
-                            </Link>
-                          ))}
+                            {currentUser.id === parseInt(userId) && (
+                              <div
+                                onClick={() => setShowModalUpdateAvatar(true)}
+                              >
+                                <BsCameraFill />
+                              </div>
+                            )}
+                          </>
+                        </span>
+                        <div className="profile__top__info__user__left__info">
+                          <h3>
+                            {userProfile.firstName + " " + userProfile.lastName}
+                          </h3>
+                          <span>{userFriends.length} bạn bè</span>
+                          <div className="profile__top__info__user__left__info__list-image">
+                            {userFriends.slice(0, 7).map((friend, index) => (
+                              <Link
+                                key={index}
+                                to={routesPublic.profile + "/" + friend.id}
+                              >
+                                <img
+                                  src={"/uploads/" + friend.profilePic}
+                                  alt=""
+                                />
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  </div>
+                      </>
+                    </div>
+                  )}
                   <div className="profile__top__info__user__right">
                     {currentUser.id === parseInt(userId) ? (
                       <>

@@ -7,19 +7,23 @@ function Story({ story, reels }) {
   return (
     <div className="stories__story">
       <Link to={routesPublic.storiesShow}>
-        {story.video.endsWith(".mov") ||
-        story.video.endsWith(".mp3") ||
-        story.video.endsWith(".mp4") ? (
-          <video
-            className="stories__story__image-story"
-            src={"/uploads/" + story.video}
-            alt=""
-          />
-        ) : (
-          <div
-            style={{ backgroundImage: `url(${"/uploads/" + story.video})` }}
-            className="stories__story__image-story"
-          />
+        {story.video && (
+          <>
+            {story.video.endsWith(".mov") ||
+            story.video.endsWith(".mp3") ||
+            story.video.endsWith(".mp4") ? (
+              <video
+                className="stories__story__image-story"
+                src={"/uploads/" + story.video}
+                alt=""
+              />
+            ) : (
+              <div
+                style={{ backgroundImage: `url(${"/uploads/" + story.video})` }}
+                className="stories__story__image-story"
+              />
+            )}
+          </>
         )}
       </Link>
       {!reels && (

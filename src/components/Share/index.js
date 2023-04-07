@@ -4,7 +4,7 @@ import img2 from "../../assets/share-icons/2.png";
 import img3 from "../../assets/share-icons/3.png";
 import CreatePost from "./CreatePost";
 
-import { useContext, useRef, useState } from "react";
+import { memo, useContext, useRef, useState } from "react";
 import ErrorMesssage from "../Modal/ErrorMessage";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
@@ -14,7 +14,7 @@ import LoadingSkeleton from "../LoadingSkeleton";
 import Avatar from "../Avatar";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
-function Share() {
+const Share = memo(function Share() {
   const createShareRef = useRef();
   const skeleton = useFirstGoToPage();
   const errorRef = useRef();
@@ -22,7 +22,6 @@ function Share() {
   const { currentUser } = useContext(UserContext);
   const [showCreateShare, setShowCreateShare] = useClickOutSide(createShareRef);
   const [showError, setShowError] = useClickOutSide(errorRef);
-
   return (
     <div className="share">
       <div className="share__top">
@@ -105,6 +104,6 @@ function Share() {
       {showSpinner && <Spinner />}
     </div>
   );
-}
+})
 
 export default Share;

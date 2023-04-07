@@ -9,7 +9,7 @@ import { UserContext } from "../../context/authContext";
 import { deleteStory } from "../../redux/actions/story";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
-function Video({ story, idShow ,setIdShow}) {
+function Video({ story, idShow, setIdShow }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showCanDelete, setShowCanDelete] = useState(false);
   const videoRef = useRef(null);
@@ -26,45 +26,60 @@ function Video({ story, idShow ,setIdShow}) {
   };
   useEffect(() => {
     setIsPlaying(false);
-    const videos = document.querySelectorAll('.show-story__right__videos__video video');
-    videos.forEach(video => {
+    const videos = document.querySelectorAll(
+      ".show-story__right__videos__video video"
+    );
+    videos.forEach((video) => {
       video.pause();
-      video.currentTime = 0 ;
-    })
+      video.currentTime = 0;
+    });
     videos[idShow].play();
-  }, [idShow,story]);
+  }, [idShow, story]);
   const handleDelete = async () => {
     await dispatch(deleteStory(story.id));
     setShowCanDelete(false);
   };
   return (
     <div className={`show-story__right__videos__video`}>
-      {story.video.endsWith(".mov") ||
-      story.video.endsWith(".mp3") ||
-      story.video.endsWith(".mp4") ? (
-        <video
-          autoPlay={true}
-          ref={videoRef}
-          playsInline
-          src={"/uploads/" + story.video}
-          alt=""
-        ></video>
-      ) : (
-       <>
-       <img alt="" src={`/uploads/${story.video}`} />
-         <video
-        ></video>
-       </>
+      {story.video && (
+        <>
+          {story.video.endsWith(".mov") ||
+          story.video.endsWith(".mp3") ||
+          story.video.endsWith(".mp4") ? (
+            <video
+              autoPlay={true}
+              ref={videoRef}
+              playsInline
+              src={"/uploads/" + story.video}
+              alt=""
+            ></video>
+          ) : (
+            <>
+              <img alt="" src={`/uploads/${story.video}`} />
+              <video></video>
+            </>
+          )}
+        </>
       )}
       <div className="show-story__right__videos__video__duration">
-      {story.video.endsWith('.mov') || story.video.endsWith('.mp3') || story.video.endsWith('.mp4') &&  <StoryProgress idShow={idShow} setIdShow={setIdShow} setIsPlaying={setIsPlaying} ref={videoRef} />} 
-           
+       {story.video && <>
+         {story.video.endsWith(".mov") ||
+          story.video.endsWith(".mp3") ||
+          (story.video.endsWith(".mp4") && (
+            <StoryProgress
+              idShow={idShow}
+              setIdShow={setIdShow}
+              setIsPlaying={setIsPlaying}
+              ref={videoRef}
+            />
+          ))}
+       </>} 
       </div>
       <div className="show-story__right__videos__video__info">
         <p>
-        <Link to={routesPublic.profile+"/"+story.userId}>
-          <img src={"/uploads/" + story.profilePic} alt="" />
-        </Link>
+          <Link to={routesPublic.profile + "/" + story.userId}>
+            <img src={"/uploads/" + story.profilePic} alt="" />
+          </Link>
           <span>
             <h5>
               {story.firstName + " " + story.lastName}{" "}

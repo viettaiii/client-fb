@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { AiTwotoneVideoCamera, AiOutlineSearch } from "react-icons/ai";
-import { useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 // My imports
@@ -10,23 +10,19 @@ import { routesPublic } from "../../config/routes";
 import { UserContext } from "../../context/authContext";
 import LoadingSkeleton from "../LoadingSkeleton";
 import Button from "../Button";
-import {
-  getFriendsRequest,
-} from "../../redux/actions/friendRequest";
-import {
-  getUserFriends,
-  getUserOthers,
-} from "../../redux/actions/friend";
+import { getFriendsRequest } from "../../redux/actions/friendRequest";
+import { getUserFriends, getUserOthers } from "../../redux/actions/friend";
 import Avatar from "../Avatar";
 import "./right-bar.scss";
 import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
-  import { SocketContext } from "../../context/socketContext";
+import { SocketContext } from "../../context/socketContext";
+import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
 function RightBar() {
   const skeleton = useFirstGoToPage();
-  const { userFriends } = useSelector((state) => state.userFriends);
-  const { userOthers } = useSelector((state) => state.userOthers);
-  const { friendsRequest } = useSelector((state) => state.friendsRequest);
-  const {usersOn ,confirmFriend}= useContext(SocketContext);
+  const {isLoading : isLoadingFriends, userFriends } = useSelector((state) => state.userFriends);
+  const {isLoading : isLoadingOthers, userOthers } = useSelector((state) => state.userOthers);
+  const { isLoading : isLoadingRequest,friendsRequest } = useSelector((state) => state.friendsRequest);
+  const { usersOn, confirmFriend } = useContext(SocketContext);
   const dispatch = useDispatch();
   const { currentUser } = useContext(UserContext);
   useEffect(() => {
@@ -35,8 +31,8 @@ function RightBar() {
     dispatch(getFriendsRequest());
   }, [dispatch]);
   const handleAddFriend = async (userId_2) => {
-   const inputs = { userId_1: currentUser.id, userId_2 };
-   await  confirmFriend(inputs)
+    const inputs = { userId_1: currentUser.id, userId_2 };
+    await confirmFriend(inputs);
   };
   return (
     <div className="right-bar">
@@ -49,7 +45,7 @@ function RightBar() {
               <h4>Lời mời kết bạn</h4>
               <span>Xem tất cả</span>
             </div>
-            {friendsRequest
+            {isLoadingRequest ? <SpinnerEllipsis/>: friendsRequest
               .filter((item) => item.receiverId === currentUser.id)
               .slice(0, 2)
               .map((user, index) => (
@@ -117,7 +113,7 @@ function RightBar() {
               </div>
             </div>
             <div className="right-bar__items__accounts">
-              {userFriends.map(
+              {isLoadingFriends ? <SpinnerEllipsis/>: userFriends.map(
                 (user, index) =>
                   currentUser.id !== user.id && (
                     <Link
@@ -151,7 +147,7 @@ function RightBar() {
           )}
         </div>
         <div className="right-bar__items__accounts">
-          {userOthers.map(
+          {isLoadingOthers ? <SpinnerEllipsis/> : userOthers.map(
             (user, index) =>
               currentUser.id !== user.id && (
                 <Link
@@ -179,7 +175,6 @@ function RightBar() {
           )}
         </div>
       </div>
-                        
     </div>
   );
 }
