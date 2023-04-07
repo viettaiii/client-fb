@@ -35,7 +35,6 @@ export function useSocket() {
 }
 
 // hadnle like
-
 const useLike = (socket) => {
   const [arrivalLike, setArrivalLike] = useState(null);
   const dispatch = useDispatch();
@@ -164,7 +163,7 @@ const useConnect = () => {
   const { currentUser } = useContext(UserContext);
   const socket = useRef();
   useEffect(() => {
-    socket.current = io("ws://localhost:9111");
+    socket.current = io("https://my-socket1.herokuapp.com/");
   }, []);
   useEffect(() => {
     if (

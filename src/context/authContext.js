@@ -5,8 +5,8 @@ export const UserContext = createContext();
 
 export const ProviderUserContext = ({children}) => {
     const [currentUser , setCurrentUser] = useState(JSON.parse(localStorage.getItem('user'))  || null);
-    const login = (info) => {
-        setCurrentUser(info);
+    const login = (data) => {
+        setCurrentUser(data.info);
     }
     const logout = () => {
         setCurrentUser(null);
@@ -16,6 +16,7 @@ export const ProviderUserContext = ({children}) => {
     }
     useEffect(() => {
             localStorage.setItem('user' ,JSON.stringify(currentUser) );
+           
     },[currentUser])
     return (
         <UserContext.Provider  value={{login , logout ,update, currentUser}}>

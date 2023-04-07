@@ -58,13 +58,14 @@ export function useLogin() {
       try {
         const { data } = await httpsRequest.post("/api/auth/login", inputs);
         if (data) {
+          localStorage.setItem('token' ,JSON.stringify(data.token) );
           setShowSpinner(true);
           setTimeout(() => {
             setShowSpinner(false);
             setErrEmail("");
             setErrPassword("");
             el.textContent = "";
-            login(data.info);
+            login(data);
             navigate("/");
           }, 3 * 1000);
         }

@@ -1,11 +1,16 @@
 import * as actionTypes from '../constants/post';
 import httpsRequest from '../../api/axios';
+
 export const getPosts =  () => async (dispatch) => {
+    const headers = {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+       
+    };
     try {
         dispatch({
             type: actionTypes.GET_POSTS_REQUEST,
         })
-        const {data} = await httpsRequest.get('/api/posts');
+        const {data} = await httpsRequest.get('/api/posts' , {headers} );
         dispatch({
             type: actionTypes.GET_POSTS_SUCCESS,
             payload:data 
