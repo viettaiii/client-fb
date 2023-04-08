@@ -12,6 +12,7 @@ import CEmojiPicker from "../CEmojiPicker";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import { useUserFriend } from "../../hooks/useUserFriend";
 import { SocketContext } from "../../context/socketContext";
+import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
 function Messenges({ messenges  , conversationId  }) {
   const emojiRef = useRef();
   const { currentUser } = useContext(UserContext);
@@ -39,7 +40,7 @@ function Messenges({ messenges  , conversationId  }) {
   };
   return (
     <div className="messenges">
-      {user && (
+      {!user  ? <SpinnerEllipsis/>: (
         <div className="messenges__top">
           <div className="messenges__top__avatar">
             <Avatar image={user.profilePic} alt={user.firstName} />

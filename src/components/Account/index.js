@@ -10,31 +10,27 @@ function Account({ conversation }) {
   return (
     <>
       <div className="chat__accounts__account">
-        <>
-          <div className="chat__accounts__account__avatar">
-            <Avatar image={user.profilePic} alt={user.firstName} />
-
-            {usersOn.includes(user.id) && (
-              <span className="chat__accounts__account__avatar__status" />
-            )}
-          </div>
-          <div className="chat__accounts__account__right">
-            <span className="chat__accounts__account__right__name">
-              {!user.firstName && !user.lastName ? (
-                <SpinnerEllipsis/>
-              ) : (
-                user.firstName + " " + user.lastName
-              )}
-            </span>
-          </div>
-          <span className="chat__accounts__account__seen">
-            {!user.profilePic ? (
-              <SpinnerEllipsis/>
-            ) : (
+        {!user ? (
+          <SpinnerEllipsis />
+        ) : (
+          <>
+            <div className="chat__accounts__account__avatar">
               <Avatar image={user.profilePic} alt={user.firstName} />
-            )}
-          </span>
-        </>
+
+              {usersOn.includes(user.id) && (
+                <span className="chat__accounts__account__avatar__status" />
+              )}
+            </div>
+            <div className="chat__accounts__account__right">
+              <span className="chat__accounts__account__right__name">
+                {user.firstName + " " + user.lastName}
+              </span>
+            </div>
+            <span className="chat__accounts__account__seen">
+              <Avatar image={user.profilePic} alt={user.firstName} />
+            </span>
+          </>
+        )}
       </div>
     </>
   );

@@ -161,7 +161,7 @@ function Post({ post }) {
                 <LoadingSkeleton />
               ) : (
                 <>
-                  {likes.find(
+                  {likes.length > 0 && likes.find(
                     (like) =>
                       like.postId === post.id && like.userId === currentUser.id
                   ) ? (

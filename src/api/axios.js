@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpsRequest = axios.create({
-  baseURL: "https://viettaiback-end-fb.herokuapp.com",
+  baseURL: "https://reo-backend.herokuapp.com",
 });
 httpsRequest.interceptors.request.use(
   (config) => {

@@ -47,7 +47,7 @@ import {
   addConversation,
   getConversations,
 } from "../../redux/actions/conversation";
-import { getPosts } from "../../redux/actions/post";
+
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
   const skeleton = useFirstGoToPage();

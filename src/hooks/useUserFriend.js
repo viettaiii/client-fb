@@ -5,7 +5,7 @@ import { UserContext } from "../context/authContext";
 
 export function useUserFriend(options) {
   const { currentUser } = useContext(UserContext);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   useEffect(() => {
     if (options) {
       const getUser = async (friendId) => {
