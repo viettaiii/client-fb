@@ -8,10 +8,12 @@ import { ProviderUserContext } from "./context/authContext";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { ProviderSocketContext } from "./context/socketContext";
+import ProviderStore from "./context/storeContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <DarkModeContextProvider>
       <Provider store={store}>
+      <ProviderStore>
         <ProviderUserContext>
         <ProviderSocketContext>
           <React.StrictMode>
@@ -19,6 +21,7 @@ root.render(
           </React.StrictMode>
           </ProviderSocketContext>
         </ProviderUserContext>
+        </ProviderStore>
       </Provider>
   </DarkModeContextProvider>
 );

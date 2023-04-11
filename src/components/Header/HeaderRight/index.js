@@ -17,6 +17,7 @@ import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
 import { SocketContext } from "../../../context/socketContext";
 import Notifications from "../../Notifications";
 import { getNotifications } from "../../../redux/actions/notification";
+import { StoreContext } from "../../../context/storeContext";
 
 function HeaderRight({ isHideMessage }) {
   const skeleton = useFirstGoToPage();
@@ -33,11 +34,7 @@ function HeaderRight({ isHideMessage }) {
   const [showChat, setShowChat] = useClickOutSide(chatRef);
   const [showMenu, setShowMenu] = useClickOutSide(menuRef);
   
-  const dispatch = useDispatch();
-  const { notifications } = useSelector((state) => state.notifications);
-  useEffect(() => {
-    dispatch(getNotifications());
-  }, [dispatch]);
+ const {notifications}  = useContext(StoreContext);
   return (
     <div className="header__right">
       <div

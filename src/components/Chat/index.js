@@ -4,7 +4,7 @@ import { HiVideoCamera } from "react-icons/hi";
 import { BsArrowLeft, BsBoxArrowInDownLeft } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useContext, useEffect, useRef } from "react";
 //-My imports
 import "./chat.scss";
 import { useState } from "react";
@@ -15,16 +15,14 @@ import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
 import { useClickOutSide } from "../../hooks/useClickOutSide";
 import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
+import { StoreContext } from "../../context/storeContext";
 const Chat = forwardRef(({  }, ref) => {
   const makeConversationRef = useRef();
   const [showIconSearch, setShowIconSearch] = useState(true);
   const [showMakeConversation, setShowMakeConversation] =
   useClickOutSide(makeConversationRef);
-  const {isLoading, conversations } = useSelector((state) => state.conversations);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getConversations());
-  }, []);
+  const {conversations} = useContext(StoreContext);
+  
 
   return (
     <div className="chat" ref={ref}>
@@ -79,7 +77,7 @@ const Chat = forwardRef(({  }, ref) => {
                     <BsChevronCompactRight className='chat__message-watting__icon'/>
                     </div> */}
       <div className="chat__accounts">
-        {isLoading ? <SpinnerEllipsis/>:
+        {!conversations ? <SpinnerEllipsis/>:
           conversations.map((c, index) => (
             <Link to={routesPublic.messenger + '/'+c.id} key={index}>
                 <Account conversation={c} />

@@ -12,17 +12,13 @@ import Avatar from "../../Avatar";
 import "./make-conversation.scss";
 import {  useNavigate } from "react-router-dom";
 import { routesPublic } from "../../../config/routes";
+import { StoreContext } from "../../../context/storeContext";
 const MakeConversation = forwardRef(({ setShowMakeConversation }, ref) => {
   const { usersOn } = useContext(SocketContext);
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
-  const { users } = useSelector((state) => state.users);
-  const { conversations } = useSelector((state) => state.conversations);
+  const {conversations ,users} = useContext(StoreContext);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getConversations(currentUser.id));
-  }, []);
   const handleAddConversation = (userId) => {
     const isCheck = conversations.some(
       (c) => c.userId_1 === parseInt(userId) || c.userId_2 === parseInt(userId)

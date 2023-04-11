@@ -47,6 +47,7 @@ import {
   addConversation,
   getConversations,
 } from "../../redux/actions/conversation";
+import { StoreContext } from "../../context/storeContext";
 
 const favories = ["Lái máy bay", "Bóng đá"];
 function Profile() {
@@ -72,7 +73,7 @@ function Profile() {
   const [showDescrip, setShowDescrip] = useState(false);
   const [valueDescrip, setValueDescrip] = useState("");
   const [userFavories, setUserFavories] = useState(favories);
-  const { stories } = useSelector((state) => state.stories);
+  const {stories} = useContext(StoreContext);
   const [showSpinnerEllipsis, setShowSpinnerEllipsis] = useState(true);
   const [showModalRemove, setShowModalRemove] = useState(false);
   const { friendsRequest } = useSelector((state) => state.friendsRequest);

@@ -1,12 +1,13 @@
+import { useContext } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { routesPublic } from "../../config/routes";
+import { StoreContext } from "../../context/storeContext";
 import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
 import Conversation from "./Conversation";
 import "./conversations.scss";
 function Conversations({conversationId,usersOn}) {
-  const {  isLoading,conversations } = useSelector((state) => state.conversations);
+  const {  conversations } = useContext(StoreContext);
   return (
     <div className="conversations">
       <div className="conversations__top">
@@ -17,7 +18,7 @@ function Conversations({conversationId,usersOn}) {
         </div>
       </div>
       <div className="conversations__bottom">
-        {isLoading ?<SpinnerEllipsis/> : conversations.map((c, i) => (
+        {!conversations ?<SpinnerEllipsis/> : conversations.map((c, i) => (
           <Link to={routesPublic.messenger + "/" + c.id} >
           <Conversation usersOn={usersOn} active={conversationId && c.id === conversationId} conversation={c} key={i} />
           </Link>

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Myimport
 import { getStories } from "../../../redux/actions/story";
@@ -16,15 +16,15 @@ import HeaderRight from "../../Header/HeaderRight";
 import LoadingSkeleton from "../../LoadingSkeleton";
 import Avatar from "../../Avatar";
 import { useFirstGoToPage } from "../../../hooks/useFirstGoToPage";
+import { StoreContext } from "../../../context/storeContext";
 function ShowStory() {
   const skeleton = useFirstGoToPage();
-  const storiesRe = useSelector((state) => state.stories);
-  const { stories } = storiesRe;
+  const {stories} = useContext(StoreContext);
   const [idShow, setIdShow] = useState(0);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getStories());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getStories());
+  // }, [dispatch]);
   const handleChangeSlide = (swiper) => {
     setIdShow(swiper.activeIndex);
   };

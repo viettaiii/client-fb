@@ -20,13 +20,15 @@ import { useFirstGoToPage } from "../../hooks/useFirstGoToPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getStories } from "../../redux/actions/story";
 import SpinnerEllipsis from "../Modal/SpinnerEllipsis";
+import { StoreContext } from "../../context/storeContext";
 const Stories = memo(function Stories({}) {
-  const { isLoading, stories } = useSelector((state) => state.stories);
+  // const { isLoading, stories } = useSelector((state) => state.stories);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getStories());
-  }, []);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(getStories());
+  // }, []);
+  const {stories} = useContext(StoreContext);
   const navigationNextRef = useRef(null);
   const navigationPrevRef = useRef(null);
   const skeleton = useFirstGoToPage();
@@ -54,7 +56,7 @@ const Stories = memo(function Stories({}) {
   };
   return (
     <>
-      {isLoading ? (
+      {!stories ? (
         <SpinnerEllipsis/>
       ) : (
         <>
