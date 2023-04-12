@@ -163,7 +163,7 @@ const useConnect = () => {
   const { currentUser } = useContext(UserContext);
   const socket = useRef();
   useEffect(() => {
-    socket.current = io("https://my-socket1.herokuapp.com/");
+    socket.current = io("https://my-socket1.herokuapp.com");
   }, []);
   useEffect(() => {
     if (
