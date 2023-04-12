@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpsRequest = axios.create({
-  baseURL: "http://localhost:5500",
+  baseURL: "https://backend-shoes-reo.herokuapp.com",
 });
 httpsRequest.interceptors.request.use(
   (config) => {
